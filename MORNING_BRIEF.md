@@ -6,7 +6,7 @@
 ---
 
 ## TL;DR
-"20 Watts" went from one study to a **full, honest research program** — 3 episodes +
+"20 Watts" went from one study to a **full, honest research program** — 4 episodes +
 a synthesis, each measured on a real 7B model (and a second 3B model) on your laptop
 via MLX, with a **bit-exact verification harness** so every claim is trustworthy.
 4 academic PDFs, 3 ready-to-shoot reel scripts, 7 cinematic visuals, and a public repo.

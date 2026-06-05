@@ -73,11 +73,12 @@ Removing the smallest activations is a denoiser; the Lazy-Neuron paper reports t
 
 ## 5. The series ("20 Watts" — closing the gap to a 20-watt brain)
 
-- **Ep. 1 — Sparse Firing** *(this one).* The brain keeps ~99% of neurons quiet. We make a 7B LLM quiet too. *(computation)*
-- **Ep. 2 — Predictive Coding.** The brain only spends energy on *surprising* input (Rao & Ballard 1999). Map to **early-exit / adaptive depth**: easy, predictable tokens leave the network early; only hard tokens use full depth (cf. CALM, NeurIPS'22). *(depth)*
-- **Ep. 3 — Foveated Memory.** You don't store a perfect transcript of every word; you keep the gist. Map to **KV-cache eviction / attention sinks** (StreamingLLM, H2O). *(memory)*
+- **Ep. 1 — Sparse Firing.** The brain keeps ~99% of neurons quiet; we make a 7B LLM quiet too — skip 60% of neurons free, ~52% compute headroom. *(computation)*
+- **Ep. 2 — Predictive Coding.** The brain spends energy on *surprise* (Rao & Ballard 1999) → adaptive depth. Honest non-win: this model isn't very depth-redundant. *(depth)*
+- **Ep. 3 — Foveated Memory.** Keep the gist, not the transcript → KV sinks + sliding window (StreamingLLM) and heavy-hitters (H2O). *(memory)*
+- **Ep. 4 — Synaptic Pruning.** The brain prunes ~½ its synapses, then stays dynamic → static pruning vs dynamic firing; adaptivity ≈ 2× the sparsity. *(structure)*
 
-Three episodes, three distinct brain principles, three distinct efficiency levers — and they all *stack*. That's a research program, not a one-off.
+Four episodes, four distinct brain principles, four distinct levers — measured honestly (three wins and a non-win), and they stack. That's a research program, not a one-off.
 
 ---
 
