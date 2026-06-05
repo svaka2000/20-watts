@@ -283,7 +283,8 @@ realizable for free and fully realizable with known machinery.
 
 **A caveat on naive top-k (honesty about wall-clock).** Oracle top-k as implemented
 here uses a full per-token *sort* over 18,944 neurons. A sort can cost more than the
-matmul it saves, so naive top-k is not necessarily faster in wall-clock on MLX
+matmul it saves, so naive top-k is actually **slower** in wall-clock on MLX — we measure
+**479 tok/s dense vs 389 tok/s** at 50% skipping (0.81×), the sort dominating
 (`src/latency.py`). This is *exactly* why the field uses predictors / fused kernels:
 the FLOP headroom is real, but converting it to latency needs the predictor above or a
 hardware-aware kernel, not a sort. We report the measured latency rather than claiming

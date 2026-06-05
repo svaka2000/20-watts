@@ -49,3 +49,11 @@ model, and show they STACK toward a 20-watt brain. Beat the reference video on r
 - **Ep2 logit-lens:** raw lens says predictions stabilize late (≈11% headroom) — known lens artifact → building tuned lens for true number.
 - **Ep3 KV eviction:** faithfulness |Δppl|=0; keep 26% of cache (W=512) = +34% ppl; **attention-sink discovery reproduced: S=0→+542%, S=1→+73%.**
 - **Synthesis (stack_all):** robust free stack = 4-bit + sparse firing (skip 40%) → −35% compute @ +0.3% ppl + 4× storage; depth/KV add more at real cost (+6%/+68%).
+- **Ep1 downstream (full ARC-150):** acc 0.747 dense → 0.740 / 0.727 / 0.720 / 0.700 / 0.687 at skip 40/50/60/70/80% — graceful.
+- **Ep1 generality (Llama-3.2-3B):** bit-exact (diff 0); skip 60% <1% ppl → ~45% compute (MLP 75%). Not Qwen-specific.
+- **Ep1 latency (honest):** naive top-k 479 → 389 tok/s (0.81×, slower) — sort overhead; motivates the predictor/fused kernel.
+- **Predictor (final):** mean recall@k 0.66, mean mass-recall 0.72 (0.91 early/late, 0.60 middle).
+- **Tuned lens:** did not converge on laptop budget → dropped (honesty over a shaky stat).
+- **Deliverables:** 4 academic PDFs, landing page (GitHub Pages: svaka2000.github.io/20-watts), 7 Higgsfield visuals, Colab energy notebook, 3 reel scripts, BRIEFING, MORNING_BRIEF.
+
+## STATUS: CORE COMPLETE — series shipped, public, reproducible. Optional extensions in MORNING_BRIEF.
