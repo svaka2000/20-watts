@@ -38,9 +38,10 @@ MLP neurons per token changes held-out perplexity by < 1%** (at 50%, perplexity
 *improves*). Since the MLP is **87% of the per-token compute**, that is a **~52%
 inference-compute reduction at <1% quality cost**, verified bit-exact, and it holds on
 a downstream task (ARC-style MCQ accuracy is flat under sparsity). A small trained
-predictor recovers most of the activation *mass* of the active set, showing the
-saving is realizable in the spirit of Deja Vu — strongly in early/late layers, with
-middle layers needing a stronger predictor. **This is the robust, free lever.**
+predictor recovers most of the activation *mass* per layer — but applied across all 28
+layers at once its errors compound (**+93%** end-to-end vs the oracle's **+0.2%**), so
+realizing the headroom needs Deja Vu-grade per-head predictors, not a trivial one. The
+headroom is real; the speedup is non-trivial to capture. **Still the most robust lever.**
 
 ## Episode 2 — Predictive Coding (the honest non-win)
 

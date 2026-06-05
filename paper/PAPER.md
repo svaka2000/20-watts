@@ -276,8 +276,13 @@ layers (L2: 0.91, L27: 0.89), ~60% in the middle (L7–L18)** — at keep=0.5, f
 the 0.50 random baseline. So a *trivial* predictor already realizes most of the
 headroom where the activation mass is concentrated; the harder middle layers need a
 larger predictor (Deja Vu uses per-head MLP predictors and reports >2× real speedups
-on OPT-175B). The 52% is therefore not an oracle-only mirage — it is partially
-realizable for free and fully realizable with known machinery.
+on OPT-175B). **But per-layer recall is not the whole story.** When we apply this trivial
+predictor's masks across *all 28 layers at once* (`src/predictor_e2e.py`), the errors
+compound through depth: perplexity rises to **+93.5%**, versus the oracle's **+0.2%** at the
+same 50% skipping. So the headroom is genuine (the oracle is free), but a *trivial* low-rank
+predictor does **not** realize it end-to-end — that requires Deja Vu's stronger per-head
+predictors. We measured this rather than assuming it. The honest claim is **real headroom,
+non-trivial to realize** — not "free speedup."
 
 ![Predictor recall](../results/figures/ep1_predictor_recall.png)
 

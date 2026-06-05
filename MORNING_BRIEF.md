@@ -38,7 +38,7 @@ via MLX, with a **bit-exact verification harness** so every claim is trustworthy
 4. The repo is **public under your GitHub** — that backs the "code's open" claim. Make it private if you'd rather hold it.
 
 ## Honest notes (so you're never caught out)
-- The "~52% compute" is **FLOP headroom**, partially realizable now (predictor) and fully realizable with Deja Vu-style kernels. Naive top-k may not speed up wall-clock — I say so openly (`src/latency.py`, `results/`).
+- The "~52% compute" is **FLOP headroom**. I stress-tested realizability: per-layer a cheap predictor captures the mass, but applied across all 28 layers at once a *trivial* predictor compounds to **+93%** perplexity (vs the oracle's +0.2%) — so it needs Deja Vu-grade per-head predictors, not a trivial one (`src/predictor_e2e.py`). Naive top-k also doesn't speed up wall-clock (the sort). All measured, all in `results/`.
 - **Episode 2 is a deliberate non-win** — that's a feature. It's what makes Episodes 1 & 3 credible. Don't dress it up.
 - I tried a "tuned lens" to strengthen Ep2; it didn't converge on a laptop budget, so I **dropped it rather than report a shaky number**. Future work.
 - Higgsfield: used ~1 of your 706 credits for the 7 visuals.

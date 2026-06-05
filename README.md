@@ -37,9 +37,10 @@ A dense transformer fires **100%** of its feed-forward neurons on every token. W
 **~60% are skippable per token with <1% perplexity change** (at 50%, quality *improves*).
 Since the MLP is **87% of the per-token compute**, that's a **~52% inference-compute
 reduction at <1% quality cost**, holding on a downstream task too — and it stacks on
-4-bit. A trained predictor recovers **~91% of the active mass** in early/late layers
-(middle layers need a stronger predictor, à la Deja Vu), so the saving is realizable,
-not just oracle headroom.
+4-bit. A trained predictor recovers **~91% of the active mass** in early/late layers, but
+applied across all 28 layers at once a *trivial* predictor's errors compound (**+93%**
+end-to-end vs the oracle's +0.2%) — so the headroom is real, but realizing it needs
+Deja Vu-grade predictors, which we **measured** rather than assumed.
 → [`paper/PAPER.md`](paper/PAPER.md) · [`VIDEO_SCRIPT.md`](VIDEO_SCRIPT.md) · [`BRIEFING.md`](BRIEFING.md)
 
 ## Episode 2 — Predictive Coding (the honest non-win)

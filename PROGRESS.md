@@ -60,4 +60,6 @@ model, and show they STACK toward a 20-watt brain. Beat the reference video on r
 
 - **Ep4 Synaptic Pruning:** static (global) pruning vs dynamic (per-token) firing on Qwen2.5-7B. Dynamic free to 60% (+0.8%); static collapses at 30% (+29%), 60% (+259%). **Dynamic free@5%=60% vs static 0% → adaptivity ≈ 2× sparsity.** New paper/video/figure/visual.
 
-## STATUS: 4 EPISODES + synthesis shipped, public, reproducible. Optional extensions in MORNING_BRIEF.
+- **Ep1 end-to-end realizability (predictor_e2e):** trained predictors for ALL 28 layers; applying predicted masks everywhere at keep=0.5 → ppl +93.5% (vs oracle +0.2%). Mean recall 0.65. HONEST: trivial predictor's errors compound through depth; headroom is real but needs Deja Vu-grade per-head predictors. Tempered the realizability claim in PAPER/README/THESIS/brief accordingly.
+
+## STATUS: 4 EPISODES + synthesis shipped, public, reproducible. Realizability claim stress-tested + corrected. Optional extensions in MORNING_BRIEF.
