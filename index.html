@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>20 Watts — closing the gap between AI and a human brain</title>
+<meta name="description" content="A high-school research series copying one brain efficiency trick per episode to cut LLM inference cost — measured honestly on a real 7B model, bit-exact, on a laptop." />
+<meta property="og:title" content="20 Watts" />
+<meta property="og:description" content="Skip 60% of a 7B model's neurons for <1% quality loss. One brain trick per episode. Honest, reproducible." />
+<meta property="og:image" content="assets/series_hero_thumbnail.png" />
+<style>
+  :root{
+    --ink:#0b1020; --paper:#0a0e1a; --mist:#aeb6c8; --accent:#5bc0be; --gold:#e0a458; --warn:#e07a5f;
+    --card:#121829; --line:#1f2740;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:#eaeefb;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  .mono{font-family:"SF Mono",ui-monospace,Menlo,monospace}
+
+  /* hero */
+  .hero{position:relative;min-height:92vh;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero::before{content:"";position:absolute;inset:0;background:url('assets/series_20watts.png') center/cover;opacity:.42;filter:saturate(1.1)}
+  .hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#070a14 18%,rgba(7,10,20,.55) 60%,rgba(7,10,20,.2))}
+  .hero .wrap{position:relative;z-index:2}
+  .badge{display:inline-block;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);border:1px solid #3a3322;background:#1a1710;padding:6px 12px;border-radius:999px;margin-bottom:22px}
+  h1{font-size:clamp(44px,8vw,92px);line-height:.98;font-weight:800;letter-spacing:-.02em}
+  h1 .glow{background:linear-gradient(120deg,#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .tag{margin-top:22px;font-size:clamp(18px,2.4vw,23px);color:#cfd6ea;max-width:640px}
+  .tag b{color:#fff}
+  .cta{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{padding:13px 22px;border-radius:11px;font-weight:600;border:1px solid var(--line)}
+  .btn.primary{background:var(--accent);color:#06231f;border-color:var(--accent)}
+  .btn.ghost{background:#0e1424cc;color:#eaeefb}
+  .kpis{margin-top:40px;display:flex;gap:30px;flex-wrap:wrap;font-size:14px;color:var(--mist)}
+  .kpis b{display:block;font-size:26px;color:#fff;font-weight:800}
+
+  section{padding:84px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{color:var(--accent);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
+  h2{font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:-.01em;line-height:1.1}
+  .lead{color:#c7cee2;font-size:18px;max-width:720px;margin-top:16px}
+  .muted{color:var(--mist)}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:42px}
+  @media(max-width:820px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+  .card img{width:100%;height:170px;object-fit:cover;opacity:.92}
+  .card .body{padding:20px}
+  .card h3{font-size:20px;margin-bottom:6px}
+  .card .ep{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .card p{color:#c2cae0;font-size:15px;margin-top:8px}
+  .res{margin-top:14px;font-weight:700;color:#fff;font-size:15px}
+  .card .links{margin-top:16px;display:flex;gap:14px;font-size:14px}
+  .win{border-left:3px solid var(--accent)} .nonwin{border-left:3px solid var(--warn)} .disc{border-left:3px solid var(--gold)}
+
+  table{width:100%;border-collapse:collapse;margin-top:30px;font-size:15px}
+  th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--mist);font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.05em}
+  td b{color:#fff}
+  .figrow{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
+  @media(max-width:820px){.figrow{grid-template-columns:1fr}}
+  .figrow img{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff}
+  .trust{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:30px}
+  @media(max-width:820px){.trust{grid-template-columns:1fr}}
+  .trust div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px}
+  .trust h4{color:#fff;font-size:16px;margin-bottom:6px}
+  .trust p{color:#c2cae0;font-size:14px}
+  footer{padding:54px 0;color:var(--mist);font-size:14px}
+  footer a{color:#eaeefb}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">A neuroscience × AI research series</span>
+    <h1>20 <span class="glow">Watts</span></h1>
+    <p class="tag">Your brain runs general intelligence on about <b>20 watts</b>. An AI needs a rack of GPUs. I copy <b>one brain efficiency trick per episode</b> — and measure it honestly on a real 7B model, on a laptop.</p>
+    <div class="cta">
+      <a class="btn primary" href="pdf/20Watts_Thesis_Overview.pdf">Read the thesis (PDF)</a>
+      <a class="btn ghost" href="https://github.com/svaka2000/20-watts">Code on GitHub →</a>
+    </div>
+    <div class="kpis">
+      <div><b>60%</b>of neurons skipped<br>&lt;1% quality loss</div>
+      <div><b>~52%</b>less compute<br>verified bit-exact</div>
+      <div><b>4-bit ×</b>sparse firing<br>levers that stack</div>
+      <div><b>2</b>model families<br>Qwen &amp; Llama</div>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The premise</div>
+    <h2>The brain's real trick isn't fuzzy memory.<br>It's staying silent.</h2>
+    <p class="lead">A popular take says you cut AI energy by lowering <em>resolution</em> (4-bit quantization). True, but minor. The brain runs on 20 watts because <b>fewer than 1% of its neurons fire at once</b>, it predicts away the expected, and it keeps only the gist. This series targets those — <b>computation, depth, and memory</b> — not just storage. And every claim is checked against the unmodified model first (max difference = 0), so a win is never just a bug.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The series</div>
+    <h2>One brain principle per episode</h2>
+    <div class="grid">
+      <article class="card win">
+        <img src="assets/ep1_brain_sparse.png" alt="sparse firing"/>
+        <div class="body">
+          <div class="ep">Episode 1 · Sparse firing</div>
+          <h3>The Lazy Brain</h3>
+          <p>A dense model fires 100% of its neurons on every word. So I switched off the ones that barely fire.</p>
+          <div class="res">Skip 60% of neurons → &lt;1% quality loss · ~52% less compute</div>
+          <div class="links"><a href="pdf/20Watts_Ep1_SparseFiring.pdf">Paper</a><a href="VIDEO_SCRIPT.md">Reel script</a></div>
+        </div>
+      </article>
+      <article class="card nonwin">
+        <img src="assets/ep2_depth.png" alt="adaptive depth"/>
+        <div class="body">
+          <div class="ep">Episode 2 · Predictive coding</div>
+          <h3>I Was Wrong (On Purpose)</h3>
+          <p>Everyone says models are "too deep, just delete layers." I tested it. They're wrong — and that's the point.</p>
+          <div class="res">An honest non-win: ~1 layer was free; the last layers matter most</div>
+          <div class="links"><a href="pdf/20Watts_Ep2_PredictiveCoding.pdf">Paper</a><a href="VIDEO_SCRIPT_EP2.md">Reel script</a></div>
+        </div>
+      </article>
+      <article class="card disc">
+        <img src="assets/ep3_attention_sink.png" alt="attention sink"/>
+        <div class="body">
+          <div class="ep">Episode 3 · Foveated memory</div>
+          <h3>I Deleted the AI's Memory</h3>
+          <p>Cut 93% of the memory and it was fine. Delete <em>one</em> token and it broke completely.</p>
+          <div class="res">Reproduced the attention sink: −1 token → +542% error</div>
+          <div class="links"><a href="pdf/20Watts_Ep3_FoveatedMemory.pdf">Paper</a><a href="VIDEO_SCRIPT_EP3.md">Reel script</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The evidence</div>
+    <h2>Flat until 60%, then it breaks</h2>
+    <p class="lead">Held-out perplexity barely moves as you switch off neurons — until about 60%. Stack sparse firing on top of 4-bit and you get a model that's 4× smaller <em>and</em> ~35% cheaper to run, at +0.3% perplexity.</p>
+    <div class="figrow">
+      <img src="results/figures/fig1_quality_vs_sparsity.png" alt="quality vs sparsity"/>
+      <img src="results/figures/synthesis_stack.png" alt="synthesis"/>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Why trust it</div>
+    <h2>Smaller numbers than the hype — every one real</h2>
+    <div class="trust">
+      <div><h4>✓ Bit-exact harness</h4><p>Every intervention is checked against the unmodified model (max |Δ| = 0) before any claim.</p></div>
+      <div><h4>✓ Paired numbers</h4><p>Every compute figure ships with its quality cost. Never a lone "10×."</p></div>
+      <div><h4>✓ An honest non-win</h4><p>Episode 2 came up short, and it's published as-is. That's what makes the wins credible.</p></div>
+      <div><h4>✓ Reproducible on a laptop</h4><p>One command per experiment, on an Apple M4 Pro via MLX. Open code and data.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p style="font-size:18px;color:#fff;font-weight:700">20 Watts</p>
+    <p style="margin-top:8px">Built by a 17-year-old. Measured on Qwen2.5-7B &amp; Llama-3.2-3B (4-bit) via MLX.</p>
+    <p style="margin-top:14px"><a href="https://github.com/svaka2000/20-watts">GitHub</a> · <a href="pdf/20Watts_Thesis_Overview.pdf">Thesis PDF</a> · <a href="BRIEFING.md">Methodology &amp; defense</a></p>
+    <p style="margin-top:14px;color:#6b7490">References: Lennie 2003 · Li 2023 (Lazy Neuron) · Liu 2023 (Deja Vu) · Xiao 2023 (StreamingLLM) · Schuster 2022 (CALM).</p>
+  </div>
+</footer>
+
+</body>
+</html>
