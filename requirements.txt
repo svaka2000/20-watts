@@ -1,0 +1,9 @@
+# 20 Watts — Episode 1: Sparse Firing
+# Apple Silicon (MLX) measurement stack.
+mlx>=0.31.0
+mlx-lm>=0.20.0
+numpy>=2.0
+matplotlib>=3.8   # optional, for figures; results also written as JSON/CSV
+
+# For the GPU energy-measurement protocol (Linux/NVIDIA, run on Colab or a workstation):
+#   pip install codecarbon pynvml transformers torch
