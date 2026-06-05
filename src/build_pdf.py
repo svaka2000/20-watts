@@ -38,6 +38,7 @@ PAPERS = [
     ("PAPER.md", "20Watts_Ep1_SparseFiring.pdf"),
     ("PAPER_EP2.md", "20Watts_Ep2_PredictiveCoding.pdf"),
     ("PAPER_EP3.md", "20Watts_Ep3_FoveatedMemory.pdf"),
+    ("PAPER_EP4.md", "20Watts_Ep4_SynapticPruning.pdf"),
     ("THESIS.md", "20Watts_Thesis_Overview.pdf"),
 ]
 

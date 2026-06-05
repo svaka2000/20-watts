@@ -58,4 +58,6 @@ model, and show they STACK toward a 20-watt brain. Beat the reference video on r
 
 - **Ep3 H2O upgrade:** built a bit-exact manual-attention harness (manual ppl = fused = 6.048, |Δ|=0); at equal 132-tok budget, heavy-hitters (H2O) beat pure recency **+69% vs +79% ppl** — a real win reproduced from scratch.
 
-## STATUS: CORE COMPLETE + Ep3 H2O upgrade — series shipped, public, reproducible. Optional extensions in MORNING_BRIEF.
+- **Ep4 Synaptic Pruning:** static (global) pruning vs dynamic (per-token) firing on Qwen2.5-7B. Dynamic free to 60% (+0.8%); static collapses at 30% (+29%), 60% (+259%). **Dynamic free@5%=60% vs static 0% → adaptivity ≈ 2× sparsity.** New paper/video/figure/visual.
+
+## STATUS: 4 EPISODES + synthesis shipped, public, reproducible. Optional extensions in MORNING_BRIEF.

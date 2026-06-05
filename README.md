@@ -24,6 +24,7 @@ its quality cost**. No lone "10×."
 | **1 · Sparse Firing** | <1% of neurons fire (Lennie 2003) | computation | **Skip 60% of MLP neurons → <1% perplexity. ~52% less compute, verified bit-exact.** |
 | **2 · Predictive Coding** | spend energy on surprise | depth | Honest non-win: this model is *not* very depth-redundant; per-token early-exit needs a calibrated head. |
 | **3 · Foveated Memory** | keep the gist, not the transcript | memory | Constant memory for unlimited context; **reproduced the attention-sink: −sink → +542% perplexity.** |
+| **4 · Synaptic Pruning** | prune ~½ of synapses | structure | **Dynamic firing tolerates 60% neuron removal *free*; static pruning collapses at 30% (+29%)** — adaptivity ≈ 2× the sparsity. |
 | **★ Synthesis** | they're independent | all | **4-bit + sparse firing = 4× smaller & −35% compute at +0.3% perplexity.** |
 
 ![Episode 1 — the money figure](results/figures/fig1_quality_vs_sparsity.png)
@@ -57,6 +58,16 @@ explodes perplexity **+542%**, and a *single* sink token fixes it — the attent
 phenomenon, reproduced with a faithfulness-checked harness. And at a fixed budget, keeping
 high-attention **heavy hitters** (H2O) beats pure recency (+69% vs +79%) — bit-exact verified.
 → [`paper/PAPER_EP3.md`](paper/PAPER_EP3.md) · [`VIDEO_SCRIPT_EP3.md`](VIDEO_SCRIPT_EP3.md)
+
+## Episode 4 — Synaptic Pruning (the comparison)
+
+The brain prunes ~half its synapses in development *and* keeps firing dynamic. We test the
+static kind — permanently removing the globally least-active neurons — and race it against
+Episode 1's per-token firing on the same model. **Dynamic is free to 60% removal; static
+collapses at 30% (+29% perplexity).** Adaptivity is worth ~2× the sparsity, because the
+neurons a model needs change every token. (Honest: a SOTA pruner like Wanda would narrow,
+not close, the gap.)
+→ [`paper/PAPER_EP4.md`](paper/PAPER_EP4.md) · [`VIDEO_SCRIPT_EP4.md`](VIDEO_SCRIPT_EP4.md)
 
 ## The thesis
 

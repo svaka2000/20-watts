@@ -27,6 +27,7 @@ number; it is an honest map of which brain tricks actually transfer.
 | Sparse firing (<1% active; Lennie 2003) | **1** | top-k MLP neuron skipping | **computation** | **skip 60% of neurons → <1% ppl; ~52% compute @ <1% quality** |
 | Predictive coding (spend on surprise; Rao–Ballard 1999) | **2** | adaptive depth / early exit | **depth** | nuanced: only ~1 layer freely droppable; per-token headroom needs a calibrated exit head |
 | Foveated/gist memory | **3** | KV sinks + sliding window | **memory** | constant memory; +34% ppl at 74% memory saved; **attention-sink: −sink → +542%** |
+| Synaptic pruning (~½ of synapses; Huttenlocher 1979) | **4** | static structured pruning | **structure** | dynamic firing tolerates 60% removal free; static collapses at 30% (+29%) — adaptivity ≈ 2× sparsity |
 | Low-resolution storage | (the "other guy") | 4-bit quantization | **storage** | 4× smaller weights (orthogonal, already applied) |
 
 ## Episode 1 — Sparse Firing (the big win)
@@ -63,6 +64,16 @@ and a *single* sink token recovers almost all of it — a vivid, reproduced exam
 mechanism a model secretly relies on, caught with a faithfulness-checked harness. And at a
 fixed budget, keeping high-attention *heavy hitters* (H2O) beats pure recency (+69% vs +79%
 perplexity at 92% eviction) — verified with a bit-exact manual-attention implementation.
+
+## Episode 4 — Synaptic Pruning (the comparison)
+
+The brain prunes about half its synapses once, in development, then keeps the survivors
+dynamic. We measure the static kind — permanently deleting the globally least-active MLP
+neurons — and race it against Episode 1's per-token sparsity on the same model. Dynamic is
+free to 60% removal; the *same* fraction of static pruning costs **+259%** perplexity, and
+even a 30% permanent cut costs +29%. Adaptivity is worth roughly **twice** the sparsity,
+because which neurons matter is highly input-dependent — a measured explanation for why a
+brain prunes once but fires dynamically forever.
 
 ## Synthesis — what stacks
 

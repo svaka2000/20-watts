@@ -1,0 +1,68 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "calibration": "Salesforce/wikitext/wikitext-2-raw-v1",
+  "calib_tokens": 4096,
+  "eval_tokens": 199,
+  "integrity_diff": 0.0,
+  "comparison": [
+    {
+      "keep": 1.0,
+      "skip": 0.0,
+      "ppl_dynamic": 24.086237637543274,
+      "ppl_static": 24.086237637543274,
+      "dyn_increase_pct": 0.0,
+      "stat_increase_pct": 0.0
+    },
+    {
+      "keep": 0.7,
+      "skip": 0.3,
+      "ppl_dynamic": 24.039240115615065,
+      "ppl_static": 31.169907463288272,
+      "dyn_increase_pct": -0.2,
+      "stat_increase_pct": 29.41
+    },
+    {
+      "keep": 0.6,
+      "skip": 0.4,
+      "ppl_dynamic": 24.133327041205547,
+      "ppl_static": 39.248839424943355,
+      "dyn_increase_pct": 0.2,
+      "stat_increase_pct": 62.95
+    },
+    {
+      "keep": 0.5,
+      "skip": 0.5,
+      "ppl_dynamic": 23.71281513502692,
+      "ppl_static": 56.9952966774873,
+      "dyn_increase_pct": -1.55,
+      "stat_increase_pct": 136.63
+    },
+    {
+      "keep": 0.4,
+      "skip": 0.6,
+      "ppl_dynamic": 24.275148340672132,
+      "ppl_static": 86.56862915519338,
+      "dyn_increase_pct": 0.78,
+      "stat_increase_pct": 259.41
+    },
+    {
+      "keep": 0.3,
+      "skip": 0.7,
+      "ppl_dynamic": 27.940524471445343,
+      "ppl_static": 168.17414165184545,
+      "dyn_increase_pct": 16.0,
+      "stat_increase_pct": 598.22
+    },
+    {
+      "keep": 0.2,
+      "skip": 0.8,
+      "ppl_dynamic": 33.31005738633129,
+      "ppl_static": 365.89402781973274,
+      "dyn_increase_pct": 38.29,
+      "stat_increase_pct": 1419.1
+    }
+  ],
+  "dynamic_free_skip_at_5pct": 0.6,
+  "static_free_skip_at_5pct": 0.0,
+  "note": "Static pruning is free to realize (smaller matrix, no predictor); dynamic needs a predictor but tolerates more sparsity because the needed neurons change per token. The gap is the measured value of adaptivity."
+}

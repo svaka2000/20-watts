@@ -120,4 +120,30 @@ if h2o:
     fig.savefig(os.path.join(FIGD, "ep3_h2o.png")); plt.close(fig)
     print("wrote h2o figure")
 
+# ---- Ep4: static pruning vs dynamic firing ----
+sp = load("synaptic_prune_results.json")
+if sp:
+    rows = sp["comparison"]
+    skip = [r["skip"] * 100 for r in rows]
+    dyn = [r["dyn_increase_pct"] for r in rows]
+    stat = [r["stat_increase_pct"] for r in rows]
+    fig, ax = plt.subplots(figsize=(7.4, 4.4))
+    ax.axhspan(-5, 5, color=ACCENT, alpha=0.10, label="≤5% quality cost")
+    ax.plot(skip, stat, "-o", color=WARN, lw=2.4, ms=7, label="STATIC pruning (one fixed set)")
+    ax.plot(skip, dyn, "-o", color=INK, lw=2.4, ms=7, mfc=ACCENT, mec=INK,
+            label="DYNAMIC sparse firing (per token)")
+    ax.set_xlabel("% of MLP neurons removed")
+    ax.set_ylabel("Perplexity increase vs dense (%)")
+    ax.set_title("Why the brain stays dynamic (Qwen2.5-7B)", fontweight="bold")
+    ax.annotate("permanent pruning\nexplodes", xy=(60, 259), xytext=(34, 700),
+                color=WARN, fontweight="bold", fontsize=9,
+                arrowprops=dict(arrowstyle="->", color=WARN))
+    ax.annotate("per-token stays flat\n(free to 60%)", xy=(60, 0.8), xytext=(8, 250),
+                color=INK, fontweight="bold", fontsize=9,
+                arrowprops=dict(arrowstyle="->", color=INK))
+    ax.legend(frameon=False, fontsize=9, loc="upper left")
+    ax.grid(alpha=0.2)
+    fig.savefig(os.path.join(FIGD, "ep4_static_vs_dynamic.png")); plt.close(fig)
+    print("wrote ep4 figure")
+
 print("done ->", os.path.abspath(FIGD))
