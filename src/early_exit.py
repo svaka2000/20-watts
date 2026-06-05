@@ -39,7 +39,16 @@ EVAL_TEXT = (
     "predictive coding, and it suggests that intelligence is less about computing more "
     "and more about computing only what is necessary. A machine built on the same "
     "principle would think hard about the difficult parts of a sentence and coast "
-    "through the easy ones, spending its energy where the meaning actually lives."
+    "through the easy ones, spending its energy where the meaning actually lives. "
+    "Consider how a fluent reader moves across a page. Common words such as the, of, "
+    "and, and to are barely processed at all; the eyes skip over them while the mind "
+    "races ahead, already certain of what comes next. Only the rare, the unexpected, "
+    "or the ambiguous word causes a reader to slow down and attend. A language model "
+    "could behave the same way, allocating only a shallow pass to the predictable "
+    "filler that knits a sentence together and reserving its full depth for the words "
+    "that genuinely change the meaning. In practice most of the tokens a model emits "
+    "are exactly this kind of filler, which suggests that a great deal of the compute "
+    "spent on them is simply wasted effort that a more thoughtful system would avoid."
 )
 
 
@@ -110,6 +119,18 @@ def main():
                 break
     avg_stab = float(stabilize.mean())
 
+    # oracle earliest-agreement (loose): first layer whose top-1 == final, ignoring
+    # later wobble. Upper bound on adaptive-depth headroom that a calibrated exit
+    # head (CALM / tuned lens) could realize.
+    earliest = np.full(T, L, dtype=np.int32)
+    for t in range(T):
+        hit = np.where(per_layer_pred[:, t] == final_pred[t])[0]
+        if len(hit):
+            earliest[t] = hit[0] + 1
+    avg_early = float(earliest.mean())
+    print(f"[oracle] earliest top-1 agreement: avg depth {avg_early:.1f}/{L} "
+          f"→ {(1-avg_early/L):.0%} depth headroom (loose upper bound)", flush=True)
+
     # confidence-thresholded early exit
     conf_rows = []
     for tau in [float(x) for x in args.confidences.split(",")]:
@@ -133,6 +154,8 @@ def main():
               "method": "logit-lens stabilization + confidence early-exit",
               "avg_stabilization_depth": round(avg_stab, 2),
               "stabilization_layers_saved_frac": round(1 - avg_stab / L, 4),
+              "oracle_earliest_depth": round(avg_early, 2),
+              "oracle_depth_headroom_frac": round(1 - avg_early / L, 4),
               "confidence_sweep": conf_rows,
               "note": "Logit-lens is an upper bound on adaptive-depth headroom; "
                       "true early exit needs per-layer heads (CALM)."}

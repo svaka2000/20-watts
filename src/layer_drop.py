@@ -48,6 +48,8 @@ def main():
     LayerClass = type(sm.layers[0])
     _orig = LayerClass.__call__
     DROP = set()
+    for i, l in enumerate(sm.layers):      # tag the DECODER BLOCK (not just its .mlp)
+        l.layer_id = i
 
     def patched(self2, x, *a, **k):
         if getattr(self2, "layer_id", -1) in DROP:

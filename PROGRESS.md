@@ -42,4 +42,10 @@ model, and show they STACK toward a 20-watt brain. Beat the reference video on r
 ---
 
 ## RESULTS LOG (running)
-- **Ep1 core (done earlier):** skip 60% MLP neurons → <1% ppl change (50%→ better); MLP=87% FLOPs → ~52% compute cut @<1% quality, 57% @<5%; integrity diff=0; stacks on 4-bit.
+- **Ep1 core:** skip 60% MLP neurons → <1% ppl change (50%→ better); MLP=87% FLOPs → ~52% compute cut @<1% quality, 57% @<5%; integrity diff=0; stacks on 4-bit.
+- **Ep1 downstream:** ARC-style MCQ accuracy holds (0.875 dense = 0.875 at 40% skip) — confirms ppl story on a real task.
+- **Ep1 predictor:** low-rank predictor of active neurons; smoke recall 0.68 vs 0.50 random, predicted-mask err≈oracle. Full run (rank 1024) in progress.
+- **Ep2 layer-drop:** HONEST/nuanced — only ~1 layer freely droppable; last layers critical; layer 8 removal *improves* ppl 2.5%. Anti-hype vs "just delete layers."
+- **Ep2 logit-lens:** raw lens says predictions stabilize late (≈11% headroom) — known lens artifact → building tuned lens for true number.
+- **Ep3 KV eviction:** faithfulness |Δppl|=0; keep 26% of cache (W=512) = +34% ppl; **attention-sink discovery reproduced: S=0→+542%, S=1→+73%.**
+- **Synthesis (stack_all):** robust free stack = 4-bit + sparse firing (skip 40%) → −35% compute @ +0.3% ppl + 4× storage; depth/KV add more at real cost (+6%/+68%).

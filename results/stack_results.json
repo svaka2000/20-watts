@@ -1,0 +1,45 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "eval_tokens": 1301,
+  "operating_point": {
+    "sparse_keep": 0.6,
+    "layers_dropped": 1,
+    "kv_window": 512
+  },
+  "stages": [
+    {
+      "stage": "dense (4-bit only)",
+      "ppl": 5.637790241030036,
+      "ppl_increase_pct": 0.0,
+      "compute_reduction_pct": 0.0,
+      "kv_mem_saved_pct_at_T": 0.0
+    },
+    {
+      "stage": "+ sparse firing (skip 40%)",
+      "ppl": 5.654331423042719,
+      "ppl_increase_pct": 0.29,
+      "compute_reduction_pct": 35.0,
+      "kv_mem_saved_pct_at_T": 0.0
+    },
+    {
+      "stage": "+ drop 1 layers",
+      "ppl": 5.995538594132881,
+      "ppl_increase_pct": 6.35,
+      "compute_reduction_pct": 37.3,
+      "kv_mem_saved_pct_at_T": 0.0
+    },
+    {
+      "stage": "+ KV window 512",
+      "ppl": 9.450746659767438,
+      "ppl_increase_pct": 67.63,
+      "compute_reduction_pct": 37.3,
+      "kv_mem_saved_pct_at_T": 60.3
+    }
+  ],
+  "headline": {
+    "final_ppl_increase_pct": 67.63,
+    "compute_reduction_pct": 37.3,
+    "kv_mem_saved_pct_at_T": 60.3,
+    "plus_4bit_storage": "4x smaller weights (orthogonal)"
+  }
+}

@@ -1,34 +1,36 @@
 {
   "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
   "n_layers": 28,
-  "eval_tokens": 158,
+  "eval_tokens": 303,
   "method": "logit-lens stabilization + confidence early-exit",
-  "avg_stabilization_depth": 25.74,
-  "stabilization_layers_saved_frac": 0.0807,
+  "avg_stabilization_depth": 25.91,
+  "stabilization_layers_saved_frac": 0.0745,
+  "oracle_earliest_depth": 24.93,
+  "oracle_depth_headroom_frac": 0.1095,
   "confidence_sweep": [
     {
       "tau": 0.5,
-      "avg_exit_depth": 11.7,
-      "layers_saved_frac": 0.5823,
-      "top1_agreement": 0.1392
+      "avg_exit_depth": 12.31,
+      "layers_saved_frac": 0.5602,
+      "top1_agreement": 0.132
     },
     {
       "tau": 0.7,
-      "avg_exit_depth": 18.17,
-      "layers_saved_frac": 0.351,
-      "top1_agreement": 0.4114
+      "avg_exit_depth": 17.73,
+      "layers_saved_frac": 0.3667,
+      "top1_agreement": 0.3564
     },
     {
       "tau": 0.9,
-      "avg_exit_depth": 23.08,
-      "layers_saved_frac": 0.1759,
-      "top1_agreement": 0.7342
+      "avg_exit_depth": 22.89,
+      "layers_saved_frac": 0.1823,
+      "top1_agreement": 0.7096
     },
     {
       "tau": 0.95,
-      "avg_exit_depth": 23.94,
-      "layers_saved_frac": 0.1451,
-      "top1_agreement": 0.7975
+      "avg_exit_depth": 24.05,
+      "layers_saved_frac": 0.1411,
+      "top1_agreement": 0.7888
     }
   ],
   "note": "Logit-lens is an upper bound on adaptive-depth headroom; true early exit needs per-layer heads (CALM)."

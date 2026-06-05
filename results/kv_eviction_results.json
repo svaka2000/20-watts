@@ -1,0 +1,81 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "corpus": "Salesforce/wikitext",
+  "eval_tokens": 1951,
+  "causal_ppl": 5.914126138506464,
+  "faithfulness_abs_ppl_diff": 0.0,
+  "method": "attention sinks + sliding window (StreamingLLM-style)",
+  "sweep": [
+    {
+      "sinks": 4,
+      "window": 32,
+      "kept_tokens": 36,
+      "mem_kept_frac_at_T": 0.0185,
+      "mem_saved_frac_at_T": 0.9815,
+      "ppl": 15.734556979186685,
+      "ppl_increase_pct": 166.05
+    },
+    {
+      "sinks": 4,
+      "window": 64,
+      "kept_tokens": 68,
+      "mem_kept_frac_at_T": 0.0349,
+      "mem_saved_frac_at_T": 0.9651,
+      "ppl": 11.830762432692795,
+      "ppl_increase_pct": 100.042
+    },
+    {
+      "sinks": 4,
+      "window": 128,
+      "kept_tokens": 132,
+      "mem_kept_frac_at_T": 0.0677,
+      "mem_saved_frac_at_T": 0.9323,
+      "ppl": 10.119387365287977,
+      "ppl_increase_pct": 71.105
+    },
+    {
+      "sinks": 4,
+      "window": 256,
+      "kept_tokens": 260,
+      "mem_kept_frac_at_T": 0.1333,
+      "mem_saved_frac_at_T": 0.8667,
+      "ppl": 8.791876103118177,
+      "ppl_increase_pct": 48.659
+    },
+    {
+      "sinks": 4,
+      "window": 512,
+      "kept_tokens": 516,
+      "mem_kept_frac_at_T": 0.2645,
+      "mem_saved_frac_at_T": 0.7355,
+      "ppl": 7.942798149877931,
+      "ppl_increase_pct": 34.302
+    }
+  ],
+  "sink_ablation": [
+    {
+      "sinks": 0,
+      "window": 128,
+      "ppl": 37.9670527218579,
+      "ppl_increase_pct": 541.97
+    },
+    {
+      "sinks": 1,
+      "window": 128,
+      "ppl": 10.218693612096475,
+      "ppl_increase_pct": 72.78
+    },
+    {
+      "sinks": 2,
+      "window": 128,
+      "ppl": 10.17885470120484,
+      "ppl_increase_pct": 72.11
+    },
+    {
+      "sinks": 4,
+      "window": 128,
+      "ppl": 10.119387365287977,
+      "ppl_increase_pct": 71.11
+    }
+  ]
+}

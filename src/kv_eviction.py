@@ -107,11 +107,22 @@ def main():
               f"({max(0,1-budget/T):.0%} mem saved)  ppl={ppl:.3f} "
               f"(+{rows[-1]['ppl_increase_pct']:.2f}%)", flush=True)
 
+    # sink ablation at fixed window — reproduces StreamingLLM's key discovery
+    # that a few initial "attention sink" tokens are essential for stability
+    abl = []
+    for S in [0, 1, 2, 4]:
+        _STATE["on"] = True; _STATE["S"] = S; _STATE["W"] = 128
+        nll, ppl = sm.perplexity(ids)
+        abl.append({"sinks": S, "window": 128, "ppl": ppl,
+                    "ppl_increase_pct": round(100 * (math.exp(nll - nll0) - 1), 2)})
+        print(f"   [ablate] sinks={S} W=128  ppl={ppl:.3f} "
+              f"(+{abl[-1]['ppl_increase_pct']:.1f}%)", flush=True)
+
     qwen2mod.create_attention_mask = _ORIG_MASK        # restore
     result = {"model": sm.model_id, "corpus": src, "eval_tokens": int(T),
               "causal_ppl": ppl0, "faithfulness_abs_ppl_diff": faith,
               "method": "attention sinks + sliding window (StreamingLLM-style)",
-              "sweep": rows}
+              "sweep": rows, "sink_ablation": abl}
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
         json.dump(result, f, indent=2)
