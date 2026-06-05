@@ -56,4 +56,6 @@ model, and show they STACK toward a 20-watt brain. Beat the reference video on r
 - **Tuned lens:** did not converge on laptop budget → dropped (honesty over a shaky stat).
 - **Deliverables:** 4 academic PDFs, landing page (GitHub Pages: svaka2000.github.io/20-watts), 7 Higgsfield visuals, Colab energy notebook, 3 reel scripts, BRIEFING, MORNING_BRIEF.
 
-## STATUS: CORE COMPLETE — series shipped, public, reproducible. Optional extensions in MORNING_BRIEF.
+- **Ep3 H2O upgrade:** built a bit-exact manual-attention harness (manual ppl = fused = 6.048, |Δ|=0); at equal 132-tok budget, heavy-hitters (H2O) beat pure recency **+69% vs +79% ppl** — a real win reproduced from scratch.
+
+## STATUS: CORE COMPLETE + Ep3 H2O upgrade — series shipped, public, reproducible. Optional extensions in MORNING_BRIEF.

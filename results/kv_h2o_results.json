@@ -1,0 +1,29 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "corpus": "Salesforce/wikitext",
+  "eval_tokens": 1730,
+  "faithfulness_abs_ppl_diff": 0.0,
+  "full_ppl": 6.048466008022909,
+  "budget_tokens": 132,
+  "sinks": 4,
+  "recent_W": 64,
+  "heavy_K": 64,
+  "comparison": [
+    {
+      "mode": "stream",
+      "budget_tokens": 132,
+      "mem_saved_frac_at_T": 0.924,
+      "ppl": 10.814192318320675,
+      "ppl_increase_pct": 78.79
+    },
+    {
+      "mode": "h2o",
+      "budget_tokens": 132,
+      "mem_saved_frac_at_T": 0.924,
+      "ppl": 10.218693612096475,
+      "ppl_increase_pct": 68.95
+    }
+  ],
+  "h2o_improvement_ppl": 0.595,
+  "verdict": "heavy-hitters help"
+}

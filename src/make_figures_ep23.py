@@ -103,4 +103,21 @@ if st:
     fig.savefig(os.path.join(FIGD, "synthesis_stack.png")); plt.close(fig)
     print("wrote synthesis figure")
 
+# ---- Ep3 H2O: heavy hitters vs recency ----
+h2o = load("kv_h2o_results.json")
+if h2o:
+    rows = h2o["comparison"]
+    labels = ["recency only" if r["mode"] == "stream" else "H2O\n(+ heavy hitters)" for r in rows]
+    vals = [r["ppl_increase_pct"] for r in rows]
+    fig, ax = plt.subplots(figsize=(5.6, 4.2))
+    ax.bar(labels, vals, color=[WARN, ACCENT], edgecolor=INK, width=0.6)
+    for i, v in enumerate(vals):
+        ax.text(i, v + 1.2, f"+{v:.0f}%", ha="center", fontweight="bold")
+    ax.set_ylabel("Perplexity increase (%)")
+    ax.set_title(f"Same {h2o['budget_tokens']}-token budget (92% evicted):\nheavy hitters win",
+                 fontweight="bold", fontsize=12)
+    ax.grid(alpha=0.2, axis="y")
+    fig.savefig(os.path.join(FIGD, "ep3_h2o.png")); plt.close(fig)
+    print("wrote h2o figure")
+
 print("done ->", os.path.abspath(FIGD))

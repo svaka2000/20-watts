@@ -23,7 +23,10 @@ a free lunch. The striking finding is the **attention sink**: at W=128, removing
 first few tokens explodes perplexity to **+542%**, while restoring a **single** sink
 token collapses it back to **+73%**. The value of foveated memory is therefore not
 "free compression" but **bounded, constant memory for unbounded context** — something
-full attention cannot offer at any price.
+full attention cannot offer at any price. We further show that, at a fixed budget, keeping
+a few high-attention *heavy-hitter* tokens (H2O) beats spending the whole budget on recency
+(**+69% vs +79% perplexity at 92% eviction**), verified with a bit-exact manual-attention
+harness.
 
 ---
 
@@ -91,6 +94,27 @@ transformer offloads a large amount of "default" attention onto the first positi
 those tokens act as a pressure-release valve, and evicting them breaks the softmax.
 It is a vivid example of a model-internal mechanism you only see when you intervene —
 and our bit-exact harness makes the reproduction trustworthy.
+
+### 3.3 Spend the budget wisely: heavy hitters beat recency (H2O)
+
+Not all old tokens are equal — some keys receive far more attention than others. Given a
+*fixed* memory budget, is it better to spend it all on the most recent tokens, or to also
+keep the high-attention "heavy hitters"? To find out we replaced the fused attention with a
+faithful **manual** implementation that exposes the attention matrix (faithfulness check:
+manual ppl = fused ppl = 6.048, **|Δ| = 0.00**), then compared two policies at the **same
+132-token budget (92% of the cache evicted)**:
+
+| Policy (equal budget) | Perplexity | Δ vs full |
+|---|---:|---:|
+| **Recency only** (4 sinks + 128 recent) | 10.81 | +78.8% |
+| **H2O** (4 sinks + 64 recent + 64 heavy-hitters) | **10.22** | **+69.0%** |
+
+Reserving half the window for the highest-attention keys — the H2O idea (Zhang et al., 2023)
+— is **meaningfully better than pure recency at the same cost** (a ~0.6-perplexity win for
+free). The memory worth keeping isn't only the recent past; it's also the few old tokens the
+model keeps looking back at. `src/kv_eviction_h2o.py`.
+
+![H2O vs recency](../results/figures/ep3_h2o.png)
 
 ## 4. Discussion
 
