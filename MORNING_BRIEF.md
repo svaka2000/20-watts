@@ -17,7 +17,7 @@ via MLX, with a **bit-exact verification harness** so every claim is trustworthy
 |---|---|---|
 | **1 · Sparse Firing** | <1% of neurons fire | **Skip 60% of MLP neurons → <1% perplexity; ~52% compute cut** (Qwen) / **~45%** (Llama-3.2-3B). Bit-exact. Holds on a downstream task. Predictor recovers ~72% of active mass (91% early/late layers). |
 | **2 · Predictive Coding** | spend energy on surprise | **Honest non-win:** this model is *not* very depth-redundant (~1 free layer; final layers critical). A useful corrective to "just delete layers" hype. |
-| **3 · Foveated Memory** | keep the gist | Constant memory for unlimited context; **reproduced the attention-sink: deleting the first token → +542% perplexity, one sink token fixes it.** |
+| **3 · Foveated Memory** | keep the gist | Constant memory for unlimited context; **reproduced the attention-sink (delete 1st token → +542% ppl)**; and **H2O heavy-hitters beat pure recency (+69% vs +79%)** at equal budget, bit-exact. |
 | **★ Synthesis** | levers are independent | **4-bit + sparse firing = 4× smaller & −35% compute at +0.3% perplexity.** |
 
 ## What's in the repo

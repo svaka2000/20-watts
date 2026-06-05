@@ -54,7 +54,8 @@ audits report non-wins; this is one.
 Keep a few "sink" tokens + a recent window → **constant** memory at any context length.
 The quality cost is real but bounded. The striking find: deleting the first few tokens
 explodes perplexity **+542%**, and a *single* sink token fixes it — the attention-sink
-phenomenon, reproduced with a faithfulness-checked harness.
+phenomenon, reproduced with a faithfulness-checked harness. And at a fixed budget, keeping
+high-attention **heavy hitters** (H2O) beats pure recency (+69% vs +79%) — bit-exact verified.
 → [`paper/PAPER_EP3.md`](paper/PAPER_EP3.md) · [`VIDEO_SCRIPT_EP3.md`](VIDEO_SCRIPT_EP3.md)
 
 ## The thesis

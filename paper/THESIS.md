@@ -60,7 +60,9 @@ attention cost **constant** regardless of context length. The quality cost is re
 and bounded (keep 26% of the cache → +34% perplexity). The striking result is the
 **attention sink**: removing the first few tokens explodes perplexity by **+542%**,
 and a *single* sink token recovers almost all of it — a vivid, reproduced example of a
-mechanism a model secretly relies on, caught with a faithfulness-checked harness.
+mechanism a model secretly relies on, caught with a faithfulness-checked harness. And at a
+fixed budget, keeping high-attention *heavy hitters* (H2O) beats pure recency (+69% vs +79%
+perplexity at 92% eviction) — verified with a bit-exact manual-attention implementation.
 
 ## Synthesis — what stacks
 
