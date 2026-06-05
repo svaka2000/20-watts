@@ -5,7 +5,8 @@
   "corpus": "Salesforce/wikitext/wikitext-2-raw-v1",
   "n_tokens_per_layer": 8000,
   "k_active": 9472,
-  "mean_recall_at_k": 0.6579,
+  "mean_recall_at_k": 0.6571,
+  "mean_pred_mass_recall": 0.7197,
   "random_baseline_recall": 0.5,
   "predictor_flops_per_token_per_layer": 23068672,
   "one_projection_flops": 67895296,
@@ -13,45 +14,51 @@
   "per_layer": [
     {
       "layer": 2,
-      "recall_at_k": 0.7995,
+      "recall_at_k": 0.798,
       "random_baseline": 0.5,
+      "pred_mass_recall": 0.9136,
       "oracle_output_relerr": 0.0178,
-      "predicted_output_relerr": 0.0628
+      "predicted_output_relerr": 0.0626
     },
     {
       "layer": 7,
-      "recall_at_k": 0.584,
+      "recall_at_k": 0.5833,
       "random_baseline": 0.5,
+      "pred_mass_recall": 0.5996,
       "oracle_output_relerr": 0.1182,
-      "predicted_output_relerr": 0.4875
+      "predicted_output_relerr": 0.4808
     },
     {
       "layer": 13,
-      "recall_at_k": 0.5846,
+      "recall_at_k": 0.5845,
       "random_baseline": 0.5,
+      "pred_mass_recall": 0.6016,
       "oracle_output_relerr": 0.1299,
-      "predicted_output_relerr": 0.4881
+      "predicted_output_relerr": 0.4845
     },
     {
       "layer": 18,
       "recall_at_k": 0.581,
       "random_baseline": 0.5,
+      "pred_mass_recall": 0.605,
       "oracle_output_relerr": 0.1199,
-      "predicted_output_relerr": 0.4744
+      "predicted_output_relerr": 0.4733
     },
     {
       "layer": 23,
-      "recall_at_k": 0.6484,
+      "recall_at_k": 0.6478,
       "random_baseline": 0.5,
+      "pred_mass_recall": 0.708,
       "oracle_output_relerr": 0.0874,
-      "predicted_output_relerr": 0.2675
+      "predicted_output_relerr": 0.263
     },
     {
       "layer": 27,
-      "recall_at_k": 0.7499,
+      "recall_at_k": 0.748,
       "random_baseline": 0.5,
+      "pred_mass_recall": 0.8901,
       "oracle_output_relerr": 0.0193,
-      "predicted_output_relerr": 0.1554
+      "predicted_output_relerr": 0.1624
     }
   ]
 }

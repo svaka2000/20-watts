@@ -264,6 +264,31 @@ Per-layer detail (Figure 2) confirms the sparsity is not concentrated in a few l
 
 **Figure 2.** Activation sparsity at every transformer depth.
 
+### 5.5 Is the saving realizable? A trained predictor
+
+Oracle top-k gives the *headroom*; skipping a neuron's compute requires knowing it is
+small *before* computing it. Following Deja Vu, we train a tiny low-rank predictor
+`P(x) = B·ReLU(A·x)` (A: 3584×1024, B: 1024×18944; ≈ 0.34× the cost of one projection)
+on each of six representative layers to predict the active set from the MLP input `x`.
+
+It recovers **72% of the active activation *mass* on average — ~91% in early and late
+layers (L2: 0.91, L27: 0.89), ~60% in the middle (L7–L18)** — at keep=0.5, far above
+the 0.50 random baseline. So a *trivial* predictor already realizes most of the
+headroom where the activation mass is concentrated; the harder middle layers need a
+larger predictor (Deja Vu uses per-head MLP predictors and reports >2× real speedups
+on OPT-175B). The 52% is therefore not an oracle-only mirage — it is partially
+realizable for free and fully realizable with known machinery.
+
+![Predictor recall](../results/figures/ep1_predictor_recall.png)
+
+**A caveat on naive top-k (honesty about wall-clock).** Oracle top-k as implemented
+here uses a full per-token *sort* over 18,944 neurons. A sort can cost more than the
+matmul it saves, so naive top-k is not necessarily faster in wall-clock on MLX
+(`src/latency.py`). This is *exactly* why the field uses predictors / fused kernels:
+the FLOP headroom is real, but converting it to latency needs the predictor above or a
+hardware-aware kernel, not a sort. We report the measured latency rather than claiming
+a speedup we did not engineer.
+
 ---
 
 ## 6. Discussion

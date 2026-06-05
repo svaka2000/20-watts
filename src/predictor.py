@@ -166,11 +166,16 @@ def fidelity(sm, lid, Xev_m, model, keep):
     sc = model(x)
     thr_p = mx.sort(sc, axis=-1)[..., I - k:I - k + 1]
     h_pr = h * (sc >= thr_p)
+    # magnitude-weighted recall: fraction of total |h| mass kept by the predicted set
+    # (this, not exact membership, is what determines output fidelity)
+    total = mx.abs(h).sum(-1)
+    mass_pred = (mx.abs(h) * (sc >= thr_p)).sum(-1) / (total + 1e-9)
+    mass_recall = float(mx.mean(mass_pred))
     y0 = mlp.down_proj(h); yo = mlp.down_proj(h_or); yp = mlp.down_proj(h_pr)
     mx.eval(y0, yo, yp)
     y0 = np.asarray(y0).astype(np.float64)
     rel = lambda a: float(np.linalg.norm(np.asarray(a).astype(np.float64) - y0) / (np.linalg.norm(y0) + 1e-9))
-    return rel(yo), rel(yp)
+    return rel(yo), rel(yp), mass_recall
 
 
 def main():
@@ -202,21 +207,24 @@ def main():
         X, Y = data[lid]
         t1 = time.time()
         model, recall, kk, (Xev_m, Yev) = train_predictor(X, Y, H, I, r=args.rank, steps=steps)
-        rel_or, rel_pr = fidelity(sm, lid, Xev_m, model, args.keep)
+        rel_or, rel_pr, mrec = fidelity(sm, lid, Xev_m, model, args.keep)
         rows.append({"layer": lid, "recall_at_k": round(recall, 4),
                      "random_baseline": round(args.keep, 4),
+                     "pred_mass_recall": round(mrec, 4),
                      "oracle_output_relerr": round(rel_or, 4),
                      "predicted_output_relerr": round(rel_pr, 4)})
-        print(f"   L{lid:2d}: recall@k={recall:.3f} (random {args.keep:.2f})  "
+        print(f"   L{lid:2d}: recall@k={recall:.3f} mass={mrec:.3f}  "
               f"relErr oracle={rel_or:.3f} pred={rel_pr:.3f}  [{time.time()-t1:.1f}s]", flush=True)
 
     mean_recall = float(np.mean([r["recall_at_k"] for r in rows]))
+    mean_mass = float(np.mean([r["pred_mass_recall"] for r in rows]))
     # predictor FLOP cost vs one projection, to be honest about overhead
     pred_flops = args.rank * (H + I)
     proj_flops = H * I
     result = {"model": sm.model_id, "keep": args.keep, "rank": args.rank,
               "corpus": source, "n_tokens_per_layer": n_tokens, "k_active": k,
               "mean_recall_at_k": round(mean_recall, 4),
+              "mean_pred_mass_recall": round(mean_mass, 4),
               "random_baseline_recall": args.keep,
               "predictor_flops_per_token_per_layer": int(pred_flops),
               "one_projection_flops": int(proj_flops),
@@ -226,6 +234,8 @@ def main():
     with open(OUT, "w") as f:
         json.dump(result, f, indent=2)
     print(f"[result] mean recall@k = {mean_recall:.3f}  (random {args.keep})", flush=True)
+    print(f"[result] mean predicted MASS recall = {mean_mass:.3f} "
+          f"(fraction of activation magnitude kept)", flush=True)
     print(f"[result] predictor overhead = {pred_flops/proj_flops:.2f}× one projection", flush=True)
     print(f"[save] -> {os.path.abspath(OUT)}", flush=True)
 

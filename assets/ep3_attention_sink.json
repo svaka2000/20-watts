@@ -1,0 +1,27 @@
+[
+  {
+    "id": "5ad333ad-2300-44f1-806f-03c68b59c805",
+    "status": "completed",
+    "display_name": "Soul Cinematic",
+    "job_set_type": "soul_cinematic",
+    "result_url": "https://d8j0ntlcm91z4.cloudfront.net/user_3EEcHaVBW1t2xz4tHf3ZDnRNgs4/hf_20260605_095431_5ad333ad-2300-44f1-806f-03c68b59c805.png",
+    "created_at": 1780653271.991887,
+    "params": {
+      "prompt": "A single brilliant anchor point of light at the start of a long dark flowing stream, pulling in ribbons of light like a pressure release valve, conceptual attention sink, cinematic dramatic blue and gold, deep dark background",
+      "width": 1152,
+      "height": 2048,
+      "batch_size": 1,
+      "seed": 132430,
+      "enhance_prompt": false,
+      "quality": "1080p",
+      "style_id": "5fbabfac-d27b-4751-b550-fea356ed55ac",
+      "style": {
+        "id": "5fbabfac-d27b-4751-b550-fea356ed55ac",
+        "name": "General",
+        "url": "https://cdn.higgsfield.ai/soul-cinematic-style/5f42a585-8ddb-4a06-96c6-682afce0afa1.webp",
+        "strength": 1.0
+      },
+      "style_strength": null
+    }
+  }
+]

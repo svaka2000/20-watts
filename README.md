@@ -1,102 +1,104 @@
-# ⚡ 20 Watts — Episode 1: Sparse Firing
+# ⚡ 20 Watts
 
-> The human brain runs on **~20 watts** — not because it stores fuzzy memories, but
-> because **<1% of its neurons fire at any moment.** A language model fires **100%** of
-> its neurons on every word. This project makes a 7B model *lazy like a brain* — and
-> measures exactly what that's worth.
+> The human brain runs general intelligence on about **20 watts**. A large language
+> model needs a rack of GPUs. This project copies **one brain efficiency trick per
+> episode**, measures it *honestly* on a real 7B model running on a **laptop**, and
+> shows the tricks **stack** toward closing that gap.
 
-**Headline result (measured on Qwen2.5-7B-Instruct-4bit, Apple M4 Pro, MLX):**
+**Why "20 Watts"?** A popular video argued you cut AI's energy by lowering *resolution*
+(4-bit quantization — "the brain stores fuzzy memories"). True, but minor. The brain's
+real efficiency comes from **doing less computation**: <1% of neurons fire at once, it
+predicts away the expected, and it keeps only the gist. We target those.
 
-| | |
-|---|---|
-| 🧠 Skip **60%** of MLP neurons per token | **<1% perplexity change** (at 50%, quality *improves*) |
-| ⚡ Inference compute | **~52% lower** at <1% quality cost (≈57% at <5%) |
-| ✅ Integrity | skip-path is **bit-for-bit identical** to the real model (diff = 0) |
-| ✖️ Stacks on quantization | tested model is **already 4-bit** — this saving is *on top* |
-
-![The money figure](results/figures/fig1_quality_vs_sparsity.png)
-
----
-
-## The 30-second version
-
-A viral video argued you can cut AI energy by **lowering resolution** (16-bit → 4-bit
-quantization) — framed as "the brain stores low-res memories." True, but that's not the
-brain's main trick. The brain's main trick is **silence**: spikes are expensive, so it
-keeps almost every neuron off (Lennie, 2003).
-
-So we target a *different* lever — **computation, not storage**. On every token we skip
-the feed-forward neurons that are barely active. On a real 7B model, **~60% of them can
-be switched off with no measurable quality loss**, cutting roughly **half the inference
-compute** — and because the test model is already 4-bit, the two tricks **multiply**.
-
-This isn't a new algorithm; activation sparsity is known (Lazy Neuron, ICLR'23; Deja Vu,
-ICML'23). The contribution is a **rigorous, honest, reproducible measurement** on a
-laptop, framed by the right biology, with a guarantee it didn't silently break the model.
-
-## Why this beats the reference video (honestly)
-- **Different, deeper brain principle** — sparse firing (the actual reason for 20 W), not low-res storage.
-- **Numbers that survive a Q&A** — every compute figure is paired with its quality cost; no "10× vs 52%" contradiction.
-- **Verified** — `max|patched − original| = 0`. We prove we didn't break the model.
-- **Generous, not combative** — his lever and ours *stack*. 4-bit × sparse on the same model.
-
-See **[BRIEFING.md](BRIEFING.md)** for the full teardown + how to defend this in a Q&A.
+Everything here is verified with a **bit-exact harness** — before any claim, the
+modified model is checked against the original (max |Δ| = 0), so we never confuse
+"broke the model" with "made it efficient." Every efficiency number is reported **with
+its quality cost**. No lone "10×."
 
 ---
 
-## Repository
+## The series at a glance
 
-```
-20-watts/
-├── README.md                  ← you are here
-├── paper/PAPER.md             ← the study (abstract → results → refs)
-├── BRIEFING.md                ← honest teardown of the reference video + defense guide
-├── VIDEO_SCRIPT.md            ← ready-to-shoot 60s reel (Ep.1)
-├── src/
-│   ├── measure_sparsity.py    ← the experiment (MLX, Apple Silicon)
-│   ├── energy_benchmark.py    ← real joules/token on an NVIDIA GPU (Colab)
-│   └── make_figures.py        ← regenerate the figures
-├── results/
-│   ├── sparsity_results.json  ← every number, machine-readable
-│   └── figures/*.png
-└── requirements.txt
-```
+| # | Brain principle | Lever | Headline result (Qwen2.5-7B-4bit) |
+|---|---|---|---|
+| **1 · Sparse Firing** | <1% of neurons fire (Lennie 2003) | computation | **Skip 60% of MLP neurons → <1% perplexity. ~52% less compute, verified bit-exact.** |
+| **2 · Predictive Coding** | spend energy on surprise | depth | Honest non-win: this model is *not* very depth-redundant; per-token early-exit needs a calibrated head. |
+| **3 · Foveated Memory** | keep the gist, not the transcript | memory | Constant memory for unlimited context; **reproduced the attention-sink: −sink → +542% perplexity.** |
+| **★ Synthesis** | they're independent | all | **4-bit + sparse firing = 4× smaller & −35% compute at +0.3% perplexity.** |
 
-## Reproduce it (Apple Silicon, ~2 minutes)
+![Episode 1 — the money figure](results/figures/fig1_quality_vs_sparsity.png)
+
+---
+
+## Episode 1 — Sparse Firing (the big win)
+
+A dense transformer fires **100%** of its feed-forward neurons on every token. We find
+**~60% are skippable per token with <1% perplexity change** (at 50%, quality *improves*).
+Since the MLP is **87% of the per-token compute**, that's a **~52% inference-compute
+reduction at <1% quality cost**, holding on a downstream task too — and it stacks on
+4-bit. A trained predictor recovers **~91% of the active mass** in early/late layers
+(middle layers need a stronger predictor, à la Deja Vu), so the saving is realizable,
+not just oracle headroom.
+→ [`paper/PAPER.md`](paper/PAPER.md) · [`VIDEO_SCRIPT.md`](VIDEO_SCRIPT.md) · [`BRIEFING.md`](BRIEFING.md)
+
+## Episode 2 — Predictive Coding (the honest non-win)
+
+If easy tokens didn't need full depth we could exit early. We measured it two ways
+(dropping whole layers; a raw + **tuned lens** per-token probe) and found this model is
+**not very depth-redundant** — a useful corrective to "just delete layers" hype. Real
+audits report non-wins; this is one.
+→ [`paper/PAPER_EP2.md`](paper/PAPER_EP2.md) · [`VIDEO_SCRIPT_EP2.md`](VIDEO_SCRIPT_EP2.md)
+
+## Episode 3 — Foveated Memory (a discovery)
+
+Keep a few "sink" tokens + a recent window → **constant** memory at any context length.
+The quality cost is real but bounded. The striking find: deleting the first few tokens
+explodes perplexity **+542%**, and a *single* sink token fixes it — the attention-sink
+phenomenon, reproduced with a faithfulness-checked harness.
+→ [`paper/PAPER_EP3.md`](paper/PAPER_EP3.md) · [`VIDEO_SCRIPT_EP3.md`](VIDEO_SCRIPT_EP3.md)
+
+## The thesis
+
+→ [`paper/THESIS.md`](paper/THESIS.md) — the unifying overview: an honest audit of which
+brain tricks actually transfer, and how they stack.
+
+---
+
+## Reproduce everything (Apple Silicon, MLX)
 
 ```bash
 python3 -m venv .venv --system-site-packages
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python src/measure_sparsity.py      # → results/sparsity_results.json
-.venv/bin/python src/make_figures.py          # → results/figures/*.png
+.venv/bin/python src/measure_sparsity.py     # Ep1: sparsity + quality curve
+.venv/bin/python src/downstream_eval.py       # Ep1: ARC accuracy vs sparsity
+.venv/bin/python src/predictor.py             # Ep1: realizability (trained predictor)
+.venv/bin/python src/generality.py            # Ep1: same effect on Llama-3.2-3B
+.venv/bin/python src/layer_drop.py            # Ep2: depth redundancy
+.venv/bin/python src/tuned_lens.py            # Ep2: true adaptive-depth headroom
+.venv/bin/python src/kv_eviction.py           # Ep3: KV sinks + window
+.venv/bin/python src/stack_all.py             # Synthesis: all levers together
+.venv/bin/python src/make_figures.py src/make_figures_ep23.py
 ```
 
-The script prints a sanity line proving the neuron-skipping is mathematically identical
-to the model at full density, then sweeps quality vs sparsity.
+Every script prints a faithfulness/integrity check before any result. Outputs land in
+`results/` (JSON + figures). For **real GPU joules/token**, run `src/energy_benchmark.py`
+on Colab/NVIDIA.
 
-## Measure the *real* energy (NVIDIA GPU / Google Colab)
+## Repo
 
-The MLX run proves the **headroom**; this proves the **joules**. On a CUDA box:
-
-```bash
-pip install torch transformers accelerate pynvml
-python src/energy_benchmark.py --model Qwen/Qwen2.5-1.5B-Instruct --keep 0.5
 ```
-
-It samples GPU power via NVML during a fixed decode, repeats with warmup, and reports
-**joules per token (mean ± std)** dense vs sparse — the fair unit a single wattage
-reading can't give you.
-
----
-
-## The series — closing the gap to a 20-watt brain
-1. **Ep.1 — Sparse Firing** *(this)* · brain keeps 99% of neurons quiet → skip idle MLP neurons. *(compute)*
-2. **Ep.2 — Predictive Coding** · brain only pays for *surprise* → early-exit on easy tokens. *(depth)*
-3. **Ep.3 — Foveated Memory** · you keep the gist, not the transcript → KV-cache eviction. *(memory)*
-
-Three brain principles, three efficiency levers, and they all stack.
+paper/      PAPER.md (Ep1) · PAPER_EP2.md · PAPER_EP3.md · THESIS.md
+src/        sparse_patch.py (shared harness) + one script per experiment
+results/    *_results.json + figures/*.png
+BRIEFING.md         honest teardown of the reference video + Q&A defense
+VIDEO_SCRIPT*.md    ready-to-shoot reels (Ep1/2/3)
+PROGRESS.md         build log
+```
 
 ## Key references
-Lennie 2003 (*Cost of Cortical Computation*) · Attwell & Laughlin 2001 · Li et al. 2023 (*Lazy Neuron*, ICLR) · Liu et al. 2023 (*Deja Vu*, ICML) · Mirzadeh et al. 2024 (*ReLU Strikes Back*, ICLR). Full list in [paper/PAPER.md](paper/PAPER.md).
+Lennie 2003 · Attwell & Laughlin 2001 · Li et al. 2023 (Lazy Neuron) · Liu et al. 2023
+(Deja Vu) · Mirzadeh et al. 2024 (ReLU Strikes Back) · Belrose et al. 2023 (Tuned Lens) ·
+Xiao et al. 2023 (StreamingLLM) · Schuster et al. 2022 (CALM).
 
-*Built by a 17-year-old. Smaller numbers than the other guy — but every one of them is real.*
+*Built by a 17-year-old. Smaller numbers than the hype — every one of them real, paired
+with its cost, and reproducible on a laptop.*

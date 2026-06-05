@@ -90,18 +90,21 @@ class Affine(nn.Module):
         return self.lin(x)
 
 
-def train_probe(Xl, Tgt, H, steps, bs=256, lr=1e-4):
+def train_probe(Xl, Flabels, head, H, steps, bs=256, lr=1e-3):
+    # Cross-entropy distillation: train the affine probe so head(probe(h_l))
+    # predicts the model's FINAL token. Directly optimizes the metric we report,
+    # and the last-layer probe should reach ~1.0 (sanity).
     m = Affine(H); opt = optim.Adam(learning_rate=lr)
-    Xm = mx.array(Xl.astype(np.float32)); Tm = mx.array(Tgt.astype(np.float32))
+    Xm = mx.array(Xl.astype(np.float32)); Fm = mx.array(Flabels.astype(np.int32))
 
     def loss_fn(mod, xb, yb):
-        d = mod(xb) - yb
-        return mx.mean(d * d)
+        logits = head(mod(xb).astype(mx.float16))
+        return mx.mean(nn.losses.cross_entropy(logits, yb))
     lg = nn.value_and_grad(m, loss_fn)
     N = Xm.shape[0]
     for s in range(steps):
         idx = mx.array(np.random.randint(0, N, size=bs))
-        loss, grads = lg(m, Xm[idx], Tm[idx])
+        loss, grads = lg(m, Xm[idx], Fm[idx])
         opt.update(m, grads); mx.eval(m.parameters(), opt.state)
     return m
 
@@ -117,7 +120,7 @@ def main():
     text, src = build_corpus(target_tokens=6000)
     ids = sm.encode(text)
     n_tok = 1500 if args.quick else 4500
-    steps = 150 if args.quick else 400
+    steps = 80 if args.quick else 300
     print(f"[collect] hidden states for {n_tok} tokens from {src} ...", flush=True)
     t0 = time.time()
     X, Tgt, Fin, head = collect_hidden(sm, ids, n_tok)
@@ -125,24 +128,26 @@ def main():
 
     n_eval = 800 if not args.quick else 300
     tr = slice(0, X[0].shape[0] - n_eval); ev = slice(X[0].shape[0] - n_eval, None)
-    Fev = Fin[ev]
+    Fev = Fin[ev]; Ftr = Fin[tr]
 
     raw_acc = np.zeros(L); tuned_acc = np.zeros(L)
     tuned_pred = np.zeros((L, n_eval), dtype=np.int32)
     for l in range(L):
-        # raw logit lens accuracy (no probe): head(norm? ) — we approximate raw by
-        # head on the un-probed hidden (identity probe before training)
-        m = train_probe(X[l][tr], Tgt[tr], H, steps)
+        m = train_probe(X[l][tr], Ftr, head, H, steps)
         Xev = mx.array(X[l][ev].astype(np.float32))
-        logits = head(m(Xev)); mx.eval(logits)
+        logits = head(m(Xev).astype(mx.float16)); mx.eval(logits)
         pred = np.asarray(mx.argmax(logits, axis=-1))
         tuned_pred[l] = pred
         tuned_acc[l] = float((pred == Fev).mean())
-        # raw: identity probe (no training) for comparison
-        raw_logits = head(Xev); mx.eval(raw_logits)
+        # raw logit lens (untrained identity probe) for comparison
+        raw_logits = head(Xev.astype(mx.float16)); mx.eval(raw_logits)
         raw_pred = np.asarray(mx.argmax(raw_logits, axis=-1))
         raw_acc[l] = float((raw_pred == Fev).mean())
         print(f"   L{l:2d}: tuned acc={tuned_acc[l]:.3f}  raw acc={raw_acc[l]:.3f}", flush=True)
+    sane = tuned_acc[L - 1] >= 0.85
+    if not sane:
+        print(f"[warn] last-layer tuned probe acc={tuned_acc[L-1]:.2f} < 0.85 — "
+              f"undertrained; headroom is a loose estimate.", flush=True)
 
     # earliest calibrated agreement per token
     earliest = np.full(n_eval, L, dtype=np.int32)
@@ -169,6 +174,8 @@ def main():
               "tuned_lens_acc_by_layer": [round(float(a), 4) for a in tuned_acc],
               "avg_earliest_calibrated_depth": round(avg_depth, 2),
               "adaptive_depth_headroom_frac": round(1 - avg_depth / L, 4),
+              "last_layer_probe_acc": round(float(tuned_acc[L - 1]), 4),
+              "tuned_lens_converged": bool(sane),
               "fixed_exit_agreement": conf_rows}
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
