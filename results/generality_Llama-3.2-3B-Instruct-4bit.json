@@ -1,0 +1,56 @@
+{
+  "model": "mlx-community/Llama-3.2-3B-Instruct-4bit",
+  "integrity_diff": 0.0,
+  "mlp_share": 0.75,
+  "dims": {
+    "H": 3072,
+    "I": 8192,
+    "L": 28,
+    "nH": 24,
+    "nKV": 8,
+    "hd": 128,
+    "attn_flops": 25165824,
+    "mlp_flops": 75497472,
+    "inter_over_hidden": 2.667
+  },
+  "sweep": [
+    {
+      "keep": 1.0,
+      "skip": 0.0,
+      "ppl": 23.20879380099744,
+      "ppl_increase_pct": 0.0
+    },
+    {
+      "keep": 0.6,
+      "skip": 0.4,
+      "ppl": 23.20879380099744,
+      "ppl_increase_pct": 0.0
+    },
+    {
+      "keep": 0.5,
+      "skip": 0.5,
+      "ppl": 23.71281513502692,
+      "ppl_increase_pct": 2.17
+    },
+    {
+      "keep": 0.4,
+      "skip": 0.6,
+      "ppl": 23.25416777248505,
+      "ppl_increase_pct": 0.2
+    },
+    {
+      "keep": 0.3,
+      "skip": 0.7,
+      "ppl": 25.094689498803355,
+      "ppl_increase_pct": 8.13
+    },
+    {
+      "keep": 0.2,
+      "skip": 0.8,
+      "ppl": 27.4536739354601,
+      "ppl_increase_pct": 18.29
+    }
+  ],
+  "free_skip_at_1pct": 0.6,
+  "compute_reduction_predictor": 0.45
+}

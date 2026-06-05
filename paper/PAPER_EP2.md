@@ -88,12 +88,14 @@ final head trades quality for depth:
 | 0.95 | 24.0 / 28 | 14% | 0.79 |
 
 Exiting early is only *safe* at high thresholds (small savings). But the raw lens is known
-to be biased late. Our cross-entropy **tuned lens** raises early-layer agreement well above
-the raw lens (layer 0: 0% → ~30%); however, at our training budget the affine probes did
-**not** fully converge (last-layer probe accuracy is reported in
-`results/tuned_lens_results.json`), so we treat the precise per-token headroom as an
-**open question** rather than overclaiming it. *(A fully-trained tuned lens or a CALM-style
-per-layer exit head is the right tool to settle it.)*
+to be biased late. We also trained a cross-entropy **tuned lens** (per-layer affine probes,
+`src/tuned_lens.py`); it lifts early-layer agreement above the raw lens, but a single affine
+probe trained on a laptop did **not** pass our convergence sanity check (the last-layer
+probe failed to recover the final prediction), so we deliberately **do not report a headroom
+number from it** — reporting an undertrained probe would be exactly the kind of overclaim
+this series avoids. The honest position: the raw lens *under*-states early predictability
+while naive layer-pruning *over*-states redundancy, and pinning the true per-token headroom
+needs a properly-trained tuned lens or a CALM-style exit head — left to future work.
 
 ## 4. Discussion
 

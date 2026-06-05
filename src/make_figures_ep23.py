@@ -82,4 +82,25 @@ if pr:
     fig.savefig(os.path.join(FIGD, "ep1_predictor_recall.png")); plt.close(fig)
     print("wrote predictor figure")
 
+# ---- Synthesis: stacked levers ----
+st = load("stack_results.json")
+if st:
+    rows = st["stages"]
+    names = [r["stage"].replace("+ ", "+\n").replace(" (", "\n(") for r in rows]
+    ppl = [r["ppl_increase_pct"] for r in rows]
+    comp = [r["compute_reduction_pct"] for r in rows]
+    fig, ax = plt.subplots(figsize=(7.8, 4.4))
+    x = list(range(len(rows)))
+    ax.bar(x, comp, color=ACCENT, edgecolor=INK, label="compute reduction")
+    ax.set_ylabel("Compute reduction (%)")
+    ax2 = ax.twinx()
+    ax2.plot(x, ppl, "-o", color=WARN, lw=2, label="perplexity cost")
+    ax2.set_ylabel("Perplexity increase (%)", color=WARN)
+    ax.set_xticks(x); ax.set_xticklabels(names, fontsize=8)
+    ax.set_title("Synthesis: stacking brain-inspired levers (on 4-bit)", fontweight="bold")
+    for i, v in zip(x, comp):
+        ax.text(i, v + 1, f"-{v:.0f}%", ha="center", fontsize=8, fontweight="bold")
+    fig.savefig(os.path.join(FIGD, "synthesis_stack.png")); plt.close(fig)
+    print("wrote synthesis figure")
+
 print("done ->", os.path.abspath(FIGD))
