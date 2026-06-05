@@ -1,0 +1,29 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "keep": 0.5,
+  "rank": 512,
+  "corpus": "builtin-fallback",
+  "n_tokens_per_layer": 2500,
+  "k_active": 9472,
+  "mean_recall_at_k": 0.6761,
+  "random_baseline_recall": 0.5,
+  "predictor_flops_per_token_per_layer": 11534336,
+  "one_projection_flops": 67895296,
+  "predictor_overhead_vs_projection": 0.17,
+  "per_layer": [
+    {
+      "layer": 7,
+      "recall_at_k": 0.6858,
+      "random_baseline": 0.5,
+      "oracle_output_relerr": 0.1096,
+      "predicted_output_relerr": 0.1259
+    },
+    {
+      "layer": 20,
+      "recall_at_k": 0.6663,
+      "random_baseline": 0.5,
+      "oracle_output_relerr": 0.0954,
+      "predicted_output_relerr": 0.1612
+    }
+  ]
+}

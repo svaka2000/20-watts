@@ -66,7 +66,14 @@ BUILTIN = [
 
 def load_arc(n):
     from datasets import load_dataset
-    ds = load_dataset("ai2_arc", "ARC-Easy", split=f"test[:{n}]")
+    last = None; ds = None
+    for repo in ["allenai/ai2_arc", "ai2_arc"]:
+        try:
+            ds = load_dataset(repo, "ARC-Easy", split=f"test[:{n}]"); break
+        except Exception as e:
+            last = e; ds = None
+    if ds is None:
+        raise last
     out = []
     for r in ds:
         labels = r["choices"]["label"]; texts = r["choices"]["text"]

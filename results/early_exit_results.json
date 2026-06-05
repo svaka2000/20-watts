@@ -1,0 +1,35 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "n_layers": 28,
+  "eval_tokens": 158,
+  "method": "logit-lens stabilization + confidence early-exit",
+  "avg_stabilization_depth": 25.74,
+  "stabilization_layers_saved_frac": 0.0807,
+  "confidence_sweep": [
+    {
+      "tau": 0.5,
+      "avg_exit_depth": 11.7,
+      "layers_saved_frac": 0.5823,
+      "top1_agreement": 0.1392
+    },
+    {
+      "tau": 0.7,
+      "avg_exit_depth": 18.17,
+      "layers_saved_frac": 0.351,
+      "top1_agreement": 0.4114
+    },
+    {
+      "tau": 0.9,
+      "avg_exit_depth": 23.08,
+      "layers_saved_frac": 0.1759,
+      "top1_agreement": 0.7342
+    },
+    {
+      "tau": 0.95,
+      "avg_exit_depth": 23.94,
+      "layers_saved_frac": 0.1451,
+      "top1_agreement": 0.7975
+    }
+  ],
+  "note": "Logit-lens is an upper bound on adaptive-depth headroom; true early exit needs per-layer heads (CALM)."
+}
