@@ -1,0 +1,12 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "prefill_tokens": 1081,
+  "dense_min_s": 2.2562,
+  "dense_median_s": 2.4655,
+  "sparse_keep0.5_min_s": 2.7771,
+  "sparse_keep0.5_median_s": 2.7951,
+  "dense_tok_per_s": 479.1,
+  "sparse_tok_per_s": 389.3,
+  "naive_topk_speedup": 0.812,
+  "interpretation": "Oracle top-k uses a full per-token sort; if speedup <= 1 the sort dominates the saved matmul, which is exactly why a cheap predictor or fused top-k kernel (Deja Vu) is required to turn the ~52% FLOP headroom into wall-clock speedup."
+}
