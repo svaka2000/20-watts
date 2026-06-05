@@ -36,7 +36,10 @@ EVAL_TEXT = (
 
 
 def main():
-    keep = 0.5
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--keep", type=float, default=0.5)
+    keep = ap.parse_args().keep
     print("[load] model ...", flush=True)
     sm = SparseModel(verify=True)
     L, I, H = sm.dims["L"], sm.dims["I"], sm.dims["H"]
@@ -118,10 +121,11 @@ def main():
     print(f"[result] dense {ppl0:.2f} | oracle50% {pplo:.2f} (+{inc(nllo)}%) | "
           f"predicted50% {pplp:.2f} (+{inc(nllp)}%)", flush=True)
     print(f"[result] {result['verdict']}", flush=True)
-    os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    with open(OUT, "w") as f:
+    out = OUT.replace(".json", f"_keep{int(keep*100)}.json")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    with open(out, "w") as f:
         json.dump(result, f, indent=2)
-    print(f"[save] -> {os.path.abspath(OUT)}", flush=True)
+    print(f"[save] -> {os.path.abspath(out)}", flush=True)
 
 
 if __name__ == "__main__":

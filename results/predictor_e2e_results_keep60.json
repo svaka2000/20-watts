@@ -1,0 +1,15 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "keep": 0.6,
+  "corpus": "Salesforce/wikitext/wikitext-2-raw-v1",
+  "n_train_tokens": 4096,
+  "eval_tokens": 125,
+  "mean_layer_recall": 0.7148,
+  "dense_ppl": 18.39556080667227,
+  "oracle_topk_ppl": 18.503663694167408,
+  "oracle_increase_pct": 0.59,
+  "predicted_ppl": 30.56702687878971,
+  "predicted_increase_pct": 66.17,
+  "gap_pred_minus_oracle_pct": 65.58,
+  "verdict": "partly realizable \u2014 errors compound, stronger predictor needed"
+}

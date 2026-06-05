@@ -279,7 +279,10 @@ larger predictor (Deja Vu uses per-head MLP predictors and reports >2× real spe
 on OPT-175B). **But per-layer recall is not the whole story.** When we apply this trivial
 predictor's masks across *all 28 layers at once* (`src/predictor_e2e.py`), the errors
 compound through depth: perplexity rises to **+93.5%**, versus the oracle's **+0.2%** at the
-same 50% skipping. So the headroom is genuine (the oracle is free), but a *trivial* low-rank
+same 50% skipping. Even a *conservative* 40% skip still compounds to **+66%** (oracle +0.6%),
+so there is no cheap operating point — the failure is fundamental to imperfect per-layer
+prediction, not an artifact of aggressive sparsity. So the headroom is genuine (the oracle
+is free), but a *trivial* low-rank
 predictor does **not** realize it end-to-end — that requires Deja Vu's stronger per-head
 predictors. We measured this rather than assuming it. The honest claim is **real headroom,
 non-trivial to realize** — not "free speedup."

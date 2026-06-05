@@ -139,7 +139,7 @@ def train_predictor(X, Y, H, I, r=512, steps=400, bs=256, lr=1e-3, n_eval=1000):
         mx.eval(model.parameters(), opt.state, loss)
 
     # eval recall@k
-    k = int(round(Yev[0].sum()))
+    k = min(I - 1, max(1, int(round(Yev[0].sum()))))   # clamp: mask can be all-true at high keep
     Xev_m = mx.array(Xev.astype(np.float32))
     logits = model(Xev_m); mx.eval(logits)
     logits = np.asarray(logits)
