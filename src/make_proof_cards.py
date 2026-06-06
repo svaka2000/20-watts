@@ -100,8 +100,10 @@ dense = demo.get("dense_keep_1.0", "").split("efficient because", 1)
 dense_t = ("…because" + dense[1]) if len(dense) > 1 else demo.get("dense_keep_1.0", "")[:240]
 spar = demo.get("sparse_keep_0.5", "").split("efficient because", 1)
 spar_t = ("…because" + spar[1]) if len(spar) > 1 else demo.get("sparse_keep_0.5", "")[:240]
-block(0.78, "DENSE (100% of neurons)", dense_t.strip()[:230], ACCENT)
-block(0.46, "SPARSE (50% switched off)", spar_t.strip()[:230], GOLD)
+import re as _re
+clean = lambda s: _re.sub(r"<\|[^|]*\|>", "", s).strip()
+block(0.78, "DENSE (100% of neurons)", clean(dense_t)[:225], ACCENT)
+block(0.46, "SPARSE (50% switched off)", clean(spar_t)[:225], GOLD)
 ax.text(0.5, 0.08, "half the neurons gone. still coherent.", ha="center", color=INK, fontsize=23, fontweight="bold")
 save(fig, "proof_generation.png")
 
