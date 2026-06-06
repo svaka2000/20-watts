@@ -77,6 +77,15 @@ brain tricks actually transfer, and how they stack.
 
 ---
 
+## 🎬 Make the reels
+
+Everything to turn this into posts already exists: **7 cinematic b‑roll clips**
+(`assets/video/`), **3 drop‑in proof cards** (`assets/proof/`), 10 figures, and a 28s
+trailer. **[`EDIT_GUIDE.md`](EDIT_GUIDE.md)** maps every line of all four reels to the exact
+clip/figure to put on screen — paint‑by‑numbers. Scripts + hooks in the `VIDEO_SCRIPT*.md`.
+
+---
+
 ## Reproduce everything (Apple Silicon, MLX)
 
 ```bash
