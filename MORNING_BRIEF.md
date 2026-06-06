@@ -28,7 +28,7 @@ via MLX, with a **bit-exact verification harness** so every claim is trustworthy
 - `BRIEFING.md` — teardown of the original video + **the exact Q&A questions a judge will ask and how to answer**
 - `src/` — 11 experiments, all sharing a bit-exact harness (`sparse_patch.py`)
 - `results/` — every number as JSON + `figures/` (publication PNGs)
-- `assets/` — 7 cinematic Higgsfield visuals for the reels
+- `assets/` — 8 cinematic Higgsfield stills **+ `assets/video/` 7 drop-in b-roll video clips** (Veo 3.1, 9:16, ~4s) for the reels, scored by Higgsfield's Virality Predictor (`results/virality_scores.csv`). The landing site now plays them in a "reel-ready b-roll" strip. A 28s **series trailer** (`assets/video/series_trailer.mp4`) stitches all 7. **Virality Predictor's top pick: the 20-watts lightbulb/server clip (58 viral-potential vs ~49 for the rest, 67 brain-engagement) — lead your reels with it.**
 - `notebooks/energy_colab.ipynb` — run on a free Colab GPU to get the **real joules/token**
 
 ## What needs YOU (10–30 min)
