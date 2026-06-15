@@ -49,6 +49,24 @@ defensible empirical finding. Sharpen *that* into the headline and you're compet
 
 ---
 
+## ⏱️ Your calendar (junior · class of 2028) — no rush, big advantage
+
+You have a full year of runway, so we build from strength instead of scrambling:
+- **Now → August 2026:** get the mentor (Hao Lab), post the **arXiv preprint**, submit to **JEI**,
+  launch the reels/Show HN. Goal: *"published researcher"* status before junior year even starts.
+- **Late summer 2026:** submit the 4-page version to the **NeurIPS High School track** when the
+  call opens (energy = their social-impact theme). *(The award-grade paper is already done.)*
+- **Fall 2026 – Winter 2027:** enter a **Society-affiliated regional science fair** → state → aim
+  for **ISEF 2027** (Phoenix). This is the in-person prestige play with the most runway.
+- **Spring 2027:** if the work has grown (a working predictor, a new lever), apply to **Davidson
+  Fellows** (deadline ~Feb) and ML workshops.
+- **Fall 2027 (senior year):** **Regeneron STS** (due ~Nov 2027) with a mature, mentor-backed
+  paper — *and* a year of citations/press behind it. This is the dream slot, and you'll hit it
+  from a position almost no applicant has.
+
+The point: as a junior you can let this **compound** — publish now, win the circuit this year, and
+walk into STS + college apps senior year with a published, award-winning, *viral* body of work.
+
 ## 2. The 3-phase roadmap
 
 ### Phase 0 — Legitimize + launch (this week, ~6 hrs)

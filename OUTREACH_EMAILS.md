@@ -11,9 +11,13 @@ Subject line states the result. Attach nothing — link the repo. Follow up once
 
 ## 🎯 Target list (in priority order)
 
-1. **Hao AI Lab @ UCSD** — `hao-ai-lab.github.io` (Prof. Hao Zhang). They work on **efficient LLM
-   inference/serving** — your exact topic, and it's local (San Diego). **Email 2–3 of their PhD
-   students** (find addresses on the lab "People" page / their personal sites). *Top pick.*
+1. **Hao AI Lab @ UCSD** — `haoailab.com` (Prof. **Hao Zhang**, @haozhangml · haozhang.ai). They
+   work on **efficient LLM inference/serving** (DistServe, FastVideo) — your *exact* topic, and
+   it's local (San Diego). **Email 2–3 of these PhD students directly** (grab emails from their
+   personal sites; UCSD format is often `firstinitiallastname@ucsd.edu` — verify):
+   - **Lanxiang Hu** (snyhlxde1.github.io) · **Junda Chen** (GitHub @GindaChen) · **Yichao Fu**
+     (GitHub @Viol2000) · **David Su** (davids048.github.io) · **Junli Wang** (junliwang.tech) ·
+     **Will Lin** (@wlsaidhi). All work on LLM systems/inference — perfectly aligned. *Top pick.*
 2. **UCSD NLP / ML-Systems group** — e.g. Prof. Taylor Berg-Kirkpatrick (NLP). Broader, still aligned.
 3. **Authors of the papers you cite** (remote, great for an arXiv endorsement + feedback):
    - *Deja Vu* (contextual sparsity) — Beidi Chen (CMU) and her students.
