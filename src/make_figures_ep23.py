@@ -146,6 +146,29 @@ if sp:
     fig.savefig(os.path.join(FIGD, "ep4_static_vs_dynamic.png")); plt.close(fig)
     print("wrote ep4 figure")
 
+# ---- Conditional vs structural (unified eval, Wanda baseline) ----
+cvs = load("cond_vs_struct_Qwen2.5-7B-Instruct-4bit.json")
+if cvs:
+    rows = cvs["sweep"]
+    skip = [r["skip"] * 100 for r in rows]
+    fig, ax = plt.subplots(figsize=(7.4, 4.4))
+    ax.axhspan(-5, 5, color=ACCENT, alpha=0.12, label="≤5% quality cost")
+    ax.plot(skip, [r["static_wanda_pct"] for r in rows], "-o", color=WARN, lw=2,
+            label="static pruning (Wanda-style)")
+    ax.plot(skip, [r["static_freq_pct"] for r in rows], "-s", color=GOLD, lw=1.6,
+            label="static pruning (frequency)")
+    ax.plot(skip, [r["dynamic_pct"] for r in rows], "-o", color=INK, lw=2.6,
+            mfc=ACCENT, mec=INK, ms=7, label="dynamic (per-token)")
+    ax.set_xlabel("% of MLP neurons removed"); ax.set_ylabel("Perplexity increase (%)")
+    ax.set_title("Conditional vs. structural sparsity (Qwen2.5-7B, unified eval)",
+                 fontweight="bold", fontsize=12)
+    ax.annotate("a stronger (Wanda) static\nbaseline is no better",
+                xy=(60, cvs['sweep'][3]['static_wanda_pct']), xytext=(20, 300), color=WARN,
+                fontsize=8, fontweight="bold", arrowprops=dict(arrowstyle="->", color=WARN))
+    ax.legend(frameon=False, fontsize=9, loc="upper left"); ax.grid(alpha=0.2)
+    fig.savefig(os.path.join(FIGD, "cond_vs_struct.png")); plt.close(fig)
+    print("wrote cond_vs_struct figure")
+
 # ---- Mechanism: input-dependence of the active set ----
 ov = load("active_overlap_results.json")
 if ov:

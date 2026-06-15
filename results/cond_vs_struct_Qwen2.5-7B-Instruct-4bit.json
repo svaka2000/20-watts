@@ -1,0 +1,86 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "L": 28,
+  "I": 18944,
+  "calib": "Salesforce/wikitext/wikitext-2-raw-v1",
+  "eval_tokens": 1033,
+  "dense_ppl": 5.943,
+  "integrity_diff": 0.0,
+  "free_skip_at_5pct": {
+    "dynamic": 0.6,
+    "static_freq": 0.0,
+    "static_wanda": 0.0
+  },
+  "sweep": [
+    {
+      "keep": 1.0,
+      "skip": 0.0,
+      "dynamic_pct": 0.0,
+      "static_freq_pct": 0.0,
+      "static_wanda_pct": 0.0,
+      "ppl_dynamic": 5.943,
+      "ppl_static_freq": 5.943,
+      "ppl_static_wanda": 5.943
+    },
+    {
+      "keep": 0.7,
+      "skip": 0.3,
+      "dynamic_pct": 0.0,
+      "static_freq_pct": 37.62,
+      "static_wanda_pct": 39.24,
+      "ppl_dynamic": 5.943,
+      "ppl_static_freq": 8.179,
+      "ppl_static_wanda": 8.275
+    },
+    {
+      "keep": 0.6,
+      "skip": 0.4,
+      "dynamic_pct": 0.29,
+      "static_freq_pct": 63.43,
+      "static_wanda_pct": 63.11,
+      "ppl_dynamic": 5.961,
+      "ppl_static_freq": 9.713,
+      "ppl_static_wanda": 9.694
+    },
+    {
+      "keep": 0.5,
+      "skip": 0.5,
+      "dynamic_pct": 1.08,
+      "static_freq_pct": 98.29,
+      "static_wanda_pct": 99.85,
+      "ppl_dynamic": 6.007,
+      "ppl_static_freq": 11.785,
+      "ppl_static_wanda": 11.877
+    },
+    {
+      "keep": 0.4,
+      "skip": 0.6,
+      "dynamic_pct": 3.68,
+      "static_freq_pct": 135.48,
+      "static_wanda_pct": 148.71,
+      "ppl_dynamic": 6.162,
+      "ppl_static_freq": 13.995,
+      "ppl_static_wanda": 14.781
+    },
+    {
+      "keep": 0.3,
+      "skip": 0.7,
+      "dynamic_pct": 6.66,
+      "static_freq_pct": 183.49,
+      "static_wanda_pct": 228.85,
+      "ppl_dynamic": 6.339,
+      "ppl_static_freq": 16.848,
+      "ppl_static_wanda": 19.544
+    },
+    {
+      "keep": 0.2,
+      "skip": 0.8,
+      "dynamic_pct": 14.99,
+      "static_freq_pct": 390.78,
+      "static_wanda_pct": 411.33,
+      "ppl_dynamic": 6.834,
+      "ppl_static_freq": 29.167,
+      "ppl_static_wanda": 30.388
+    }
+  ]
+}

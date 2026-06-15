@@ -17,8 +17,9 @@ language model's quality better than *structural* (fixed, static) pruning, and i
 Using a bit-exact intervention harness (every manipulation is verified to reproduce the
 unmodified model when inactive, max difference 0), we find that (H1) ~60% of MLP neurons
 can be skipped per token for <1% perplexity change; (H2) at the *same* 60% sparsity, dynamic
-per-token selection costs <1% perplexity while the best *static* pruning costs +259% — i.e.
-conditional computation tolerates roughly **2× the sparsity** of structural compression; and
+per-token selection costs only ~4% perplexity while the best *static* pruning — including a
+Wanda-style weight×activation baseline — costs +136% (a ~37× larger degradation), and under a
+5% quality budget dynamic removes 60% of neurons while no static method removes any; and
 (H3) this headroom is not trivially realizable, because a cheap per-layer predictor's errors
 compound across depth (+93% perplexity end-to-end). We then provide a direct mechanistic
 explanation: the set of active neurons is highly input-dependent — the best possible fixed
@@ -84,8 +85,9 @@ float64.
 **Interventions.** For a keep-fraction p, define the per-token activation vector
 `h = SiLU(gate(x)) ⊙ up(x)` (one scalar per MLP neuron). *Dynamic* sparsity keeps, per token,
 the `pI` neurons with the largest `|h|` (an oracle upper bound on conditional methods).
-*Static* pruning keeps one fixed set for all tokens: the `pI` neurons with the largest mean
-`|h|` over a calibration set (an activation-aware static baseline). Both reduce to the dense
+*Static* pruning keeps one fixed set for all tokens, chosen by one of two importance metrics
+over a calibration set: *frequency* (largest mean `|h|`) and *Wanda-style* (largest mean `|h|`
+× ‖down-projection column‖, the weight×activation principle of state-of-the-art pruning). Both reduce to the dense
 model at p=1.
 
 **Bit-exact harness.** Before any measurement, the patched forward pass is compared to the
@@ -115,23 +117,31 @@ sparsity (0.747 → 0.720 at 60% removal). The effect replicates on Llama-3.2-3B
 at <1% perplexity; ~45% compute given its narrower MLP). Activation sparsity is real,
 input-conditioned, and model-general.
 
-### 4.2 H2 — Conditionality is worth ~2× the sparsity (supported)
+### 4.2 H2 — Conditional selection vastly outperforms static pruning (supported)
 
-Holding sparsity fixed and varying only *how* neurons are chosen:
+Holding sparsity fixed and varying only *how* the kept neurons are chosen, on a unified
+held-out set (WikiText-2, 1033 tokens), with two static baselines — *frequency* (highest mean
+activation) and *Wanda-style* (mean activation × down-projection column norm, the
+weight×activation principle behind state-of-the-art pruning):
 
-| Neurons removed | **Dynamic** (per-token) Δppl | **Static** (best fixed set) Δppl |
-|---:|---:|---:|
-| 30% | −0.2% | **+29%** |
-| 50% | −1.6% | +137% |
-| 60% | **+0.8%** | **+259%** |
-| 70% | +16% | +598% |
-| 80% | +38% | +1419% |
+| Neurons removed | **Dynamic** (per-token) | **Static** (frequency) | **Static** (Wanda-style) |
+|---:|---:|---:|---:|
+| 30% | +0.0% | +37.6% | +39.2% |
+| 50% | +1.1% | +98.3% | +99.8% |
+| 60% | **+3.7%** | **+135.5%** | **+148.7%** |
+| 70% | +6.7% | +183.5% | +228.8% |
+| 80% | +15.0% | +390.8% | +411.3% |
 
-At a 5%-perplexity budget, dynamic selection affords **60%** removal; the best static set
-affords **0%**. Removing the globally least-active 30% of neurons permanently is already far
-more damaging (+29%) than skipping a per-token-chosen 60% (+0.8%). **Conditionality, not
-sparsity per se, is what preserves quality.** (Our static baseline is activation-aware but
-not state-of-the-art; stronger pruners would narrow, not close, the gap — see §6.)
+Under a 5%-perplexity budget, dynamic affords **60%** removal; **both** static methods afford
+**0%**, and at matched 60% sparsity the static degradation is **~37× larger** than dynamic.
+Critically, the **Wanda-style baseline is *no better* than the frequency baseline — in fact
+marginally worse** — so static pruning's failure is *not* an artifact of a weak importance
+metric; it is structural (§4.3). The effect **replicates on Llama-3.2-3B** (a different family):
+at 60% removal, dynamic +4.6% vs static +222% / +244%, with the same free@5% gap (dynamic 60%
+vs static 0%) and Wanda again no better. **Conditionality, not sparsity per se, preserves
+quality.**
+
+![Conditional vs. structural sparsity](../results/figures/cond_vs_struct.png)
 
 ### 4.3 Mechanism — the active set is highly input-dependent (explains H2)
 
@@ -159,22 +169,25 @@ rather than assuming it.
 ## 5. Discussion
 
 The brain's efficiency is often attributed to *sparsity*. Our controlled comparison suggests
-the operative property is **conditionality**: the same fraction of neurons removed costs ~300×
-more perplexity when removed statically than dynamically, and the gap is explained by how much
-the active set varies with the input. This reframes a design target — efficient inference
+the operative property is **conditionality**: at matched 60% removal the static degradation is
+~37× larger on Qwen2.5-7B and ~48× larger on Llama-3.2-3B than dynamic (and a Wanda-style
+weight×activation metric does not help), and the gap is explained by how much the active set
+varies with the input. This reframes a design target — efficient inference
 should pursue input-dependent computation (with the predictor problem of §4.4 as the central
 engineering obstacle), not merely smaller fixed models. It also offers a measured caution
 against aggressive one-shot pruning of MLP neurons in models of this family.
 
 ## 6. Limitations
 
-(1) Our static baseline is activation-frequency-based, not SparseGPT/Wanda; a stronger static
-pruner would shrink the §4.2 magnitudes (though not the direction, which the §4.3 mechanism
-makes structural). (2) Perplexity and ARC are proxies; broader downstream evaluation would
-strengthen the claims. (3) The sparse-firing sweep and the dynamic-vs-static sweep use
-different held-out passages (baseline perplexities ~11 and ~24); conclusions concern relative
-degradation, and unifying the evaluation set is planned. (4) "Dynamic" here is an oracle;
-§4.4 bounds the realizable version.
+(1) Our static pruning is at the neuron level with two importance metrics (frequency and a
+Wanda-style weight×activation score, which performed no better); true unstructured weight
+pruning (SparseGPT) acts on a different axis and is untested, though the §4.3 mechanism —
+input-dependence of the active *set* — applies to any fixed-set method. (2) Perplexity and ARC
+are proxies; broader downstream evaluation would strengthen the claims. (3) The
+dynamic-vs-static comparison (§4.2) uses one unified held-out set across all conditions; the
+sparse-firing sweep (§4.1) uses a different held-out passage, so perplexity magnitudes are not
+comparable *across* sections (conclusions concern relative degradation within each).
+(4) "Dynamic" here is an oracle; §4.4 bounds the realizable version.
 
 ## 7. Conclusion
 
@@ -199,5 +212,6 @@ Zhang et al. (2023), *H2O: Heavy-Hitter Oracle*, NeurIPS.
 
 ## Appendix A — Reproducibility
 All results regenerate from `github.com/svaka2000/20-watts`: `src/measure_sparsity.py` (H1),
-`src/synaptic_prune.py` (H2), `src/active_overlap.py` (mechanism), `src/predictor_e2e.py` (H3),
+`src/conditional_vs_structural.py` (H2, two static baselines, multi-model),
+`src/active_overlap.py` (mechanism), `src/predictor_e2e.py` (H3),
 `src/generality.py` (replication). Each prints its bit-exact integrity check before measuring.
