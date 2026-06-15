@@ -77,6 +77,15 @@ brain tricks actually transfer, and how they stack.
 
 ---
 
+## 📄 Publish it / go award-winning
+
+The submittable, hypothesis-driven paper is **[`paper/ACADEMIC_PAPER.md`](paper/ACADEMIC_PAPER.md)**
+(+ PDF) — *"Conditional vs. Structural Sparsity in a 7B Language Model"* — with an original
+mechanistic result (the active set is input-dependent: a fixed set captures only 61% of each
+token's needs, which is *why* dynamic beats static ~2×). The full venue/award/college plan is
+**[`PUBLISH_STRATEGY.md`](PUBLISH_STRATEGY.md)**; the mentor/endorser emails are
+**[`OUTREACH_EMAILS.md`](OUTREACH_EMAILS.md)**.
+
 ## 🎬 Make the reels
 
 Everything to turn this into posts already exists: **7 cinematic b‑roll clips**
