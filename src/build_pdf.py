@@ -35,6 +35,7 @@ strong { color:#0b132b; }
 """
 
 PAPERS = [
+    ("ACADEMIC_PAPER.md", "20Watts_AcademicPaper_ConditionalVsStructural.pdf"),
     ("PAPER.md", "20Watts_Ep1_SparseFiring.pdf"),
     ("PAPER_EP2.md", "20Watts_Ep2_PredictiveCoding.pdf"),
     ("PAPER_EP3.md", "20Watts_Ep3_FoveatedMemory.pdf"),

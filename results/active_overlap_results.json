@@ -1,0 +1,180 @@
+{
+  "model": "mlx-community/Qwen2.5-7B-Instruct-4bit",
+  "keep": 0.5,
+  "n_tokens": 2048,
+  "corpus": "Salesforce/wikitext/wikitext-2-raw-v1",
+  "mean_static_capture": 0.607,
+  "mean_pairwise_jaccard": 0.3856,
+  "mean_frac_ever_active": 0.9713,
+  "interpretation": "The best fixed 50% set captures only 61% of the average token's active neurons (per-token selection captures 100%). Two random tokens share only 39% of their active set (Jaccard). 97% of neurons are active for at least one token. The active set is highly input-dependent, which is WHY dynamic sparsity preserves quality and a single static pruning cannot.",
+  "per_layer": [
+    {
+      "layer": 0,
+      "mean_static_capture": 0.6686,
+      "mean_pairwise_jaccard": 0.4713,
+      "frac_ever_active": 0.7918
+    },
+    {
+      "layer": 1,
+      "mean_static_capture": 0.8657,
+      "mean_pairwise_jaccard": 0.7316,
+      "frac_ever_active": 0.6172
+    },
+    {
+      "layer": 2,
+      "mean_static_capture": 0.7265,
+      "mean_pairwise_jaccard": 0.5114,
+      "frac_ever_active": 0.788
+    },
+    {
+      "layer": 3,
+      "mean_static_capture": 0.6304,
+      "mean_pairwise_jaccard": 0.3854,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 4,
+      "mean_static_capture": 0.6421,
+      "mean_pairwise_jaccard": 0.3892,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 5,
+      "mean_static_capture": 0.6433,
+      "mean_pairwise_jaccard": 0.3949,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 6,
+      "mean_static_capture": 0.5961,
+      "mean_pairwise_jaccard": 0.3662,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 7,
+      "mean_static_capture": 0.5553,
+      "mean_pairwise_jaccard": 0.3428,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 8,
+      "mean_static_capture": 0.5522,
+      "mean_pairwise_jaccard": 0.3416,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 9,
+      "mean_static_capture": 0.6012,
+      "mean_pairwise_jaccard": 0.3637,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 10,
+      "mean_static_capture": 0.5594,
+      "mean_pairwise_jaccard": 0.344,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 11,
+      "mean_static_capture": 0.5575,
+      "mean_pairwise_jaccard": 0.3433,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 12,
+      "mean_static_capture": 0.5625,
+      "mean_pairwise_jaccard": 0.3455,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 13,
+      "mean_static_capture": 0.5703,
+      "mean_pairwise_jaccard": 0.3475,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 14,
+      "mean_static_capture": 0.5693,
+      "mean_pairwise_jaccard": 0.3477,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 15,
+      "mean_static_capture": 0.565,
+      "mean_pairwise_jaccard": 0.3464,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 16,
+      "mean_static_capture": 0.558,
+      "mean_pairwise_jaccard": 0.3434,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 17,
+      "mean_static_capture": 0.5636,
+      "mean_pairwise_jaccard": 0.3456,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 18,
+      "mean_static_capture": 0.5724,
+      "mean_pairwise_jaccard": 0.3485,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 19,
+      "mean_static_capture": 0.577,
+      "mean_pairwise_jaccard": 0.3521,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 20,
+      "mean_static_capture": 0.57,
+      "mean_pairwise_jaccard": 0.3503,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 21,
+      "mean_static_capture": 0.5693,
+      "mean_pairwise_jaccard": 0.3533,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 22,
+      "mean_static_capture": 0.5827,
+      "mean_pairwise_jaccard": 0.3605,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 23,
+      "mean_static_capture": 0.6028,
+      "mean_pairwise_jaccard": 0.3715,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 24,
+      "mean_static_capture": 0.5977,
+      "mean_pairwise_jaccard": 0.3698,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 25,
+      "mean_static_capture": 0.5987,
+      "mean_pairwise_jaccard": 0.3699,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 26,
+      "mean_static_capture": 0.6189,
+      "mean_pairwise_jaccard": 0.3854,
+      "frac_ever_active": 1.0
+    },
+    {
+      "layer": 27,
+      "mean_static_capture": 0.7197,
+      "mean_pairwise_jaccard": 0.4751,
+      "frac_ever_active": 1.0
+    }
+  ]
+}

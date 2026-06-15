@@ -146,4 +146,24 @@ if sp:
     fig.savefig(os.path.join(FIGD, "ep4_static_vs_dynamic.png")); plt.close(fig)
     print("wrote ep4 figure")
 
+# ---- Mechanism: input-dependence of the active set ----
+ov = load("active_overlap_results.json")
+if ov:
+    rows = ov["per_layer"]
+    xs = [r["layer"] for r in rows]
+    cap = [r["mean_static_capture"] * 100 for r in rows]
+    jac = [r["mean_pairwise_jaccard"] * 100 for r in rows]
+    fig, ax = plt.subplots(figsize=(7.4, 4.2))
+    ax.axhline(100, color=INK, ls="--", lw=1, label="dynamic (per-token) keeps 100%")
+    ax.bar(xs, cap, color=ACCENT, edgecolor=INK, lw=0.4,
+           label="best STATIC set captures (% of each token's active neurons)")
+    ax.plot(xs, jac, "-o", color=WARN, ms=4, lw=1.6,
+            label="cross-token active-set overlap (Jaccard, %)")
+    ax.set_xlabel("Transformer layer"); ax.set_ylabel("Percent"); ax.set_ylim(0, 112)
+    ax.set_title("Why static pruning fails: the active set is input-dependent",
+                 fontweight="bold", fontsize=12)
+    ax.legend(frameon=False, fontsize=8, loc="lower center"); ax.grid(alpha=0.2, axis="y")
+    fig.savefig(os.path.join(FIGD, "mechanism_overlap.png")); plt.close(fig)
+    print("wrote mechanism figure")
+
 print("done ->", os.path.abspath(FIGD))
